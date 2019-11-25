@@ -61,8 +61,8 @@ cost of any service and repair.
 #define _KUKA_FRI_COMMANDMESSAGEENCODER_H
 
 
-#include "protobuf_gen/FRIMessages.pb.h"
-#include "protobuf/pb_frimessages_callbacks.h"
+#include <FRIMessages.pb.h>
+#include <pb_frimessages_callbacks.h>
 
 
 

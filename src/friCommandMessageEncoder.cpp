@@ -57,65 +57,65 @@ cost of any service and repair.
 \file
 \version {1.15}
 */
-#ifndef _pb_frimessages_callbacks_H
-#define _pb_frimessages_callbacks_H
+#include <cstdio>
+#include <friCommandMessageEncoder.h>
+#include <pb_encode.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+using namespace KUKA::FRI;
 
-#include "pb.h"
-#include "protobuf_gen/FRIMessages.pb.h"
+//******************************************************************************
+CommandMessageEncoder::CommandMessageEncoder(FRICommandMessage* pMessage, int num)
+   : m_nNum(num), m_pMessage(pMessage)
+{
+   initMessage();
+}
 
-/** container for repeated double elements */
-typedef struct repeatedDoubleArguments {
-   size_t size;
-   size_t max_size;
-   double* value;
-} tRepeatedDoubleArguments;
+//******************************************************************************
+CommandMessageEncoder::~CommandMessageEncoder()
+{
 
-/** container for repeated integer elements */
-typedef struct repeatedIntArguments {
-   size_t size;
-   size_t max_size;
-   int64_t* value;
-} tRepeatedIntArguments;
+}
 
-/** enumeration for direction (encoding/decoding) */
-typedef enum DIRECTION {
-   FRI_MANAGER_NANOPB_DECODE = 0, //!< Argument um eine 
-   FRI_MANAGER_NANOPB_ENCODE = 1  //!< 
-} eNanopbCallbackDirection;
+//******************************************************************************
+void CommandMessageEncoder::initMessage()
+{
+   m_pMessage->has_commandData = false;
+   m_pMessage->has_endOfMessageData = false;
+   m_pMessage->commandData.has_jointPosition = false;
+   m_pMessage->commandData.has_cartesianWrenchFeedForward = false;
+   m_pMessage->commandData.has_jointTorque = false;
+   m_pMessage->commandData.commandedTransformations_count = 0;
+   m_pMessage->header.messageIdentifier = 0;
+   // init with 0. Necessary for creating the correct reflected sequence count in the monitoring msg
+   m_pMessage->header.sequenceCounter = 0;
+   m_pMessage->header.reflectedSequenceCounter = 0;
 
+   m_pMessage->commandData.writeIORequest_count = 0;
 
-bool encode_repeatedDouble(pb_ostream_t *stream, const pb_field_t *field,
-      void * const *arg);
+   // allocate and map memory for protobuf repeated structures
+   map_repeatedDouble(FRI_MANAGER_NANOPB_ENCODE, m_nNum, 
+         &m_pMessage->commandData.jointPosition.value,
+         &m_tRecvContainer.jointPosition);
+   map_repeatedDouble(FRI_MANAGER_NANOPB_ENCODE, m_nNum, 
+         &m_pMessage->commandData.jointTorque.value,
+         &m_tRecvContainer.jointTorque);
+   
+   // nanopb encoding needs to know how many elements the static array contains
+   // a Cartesian wrench feed forward vector always contains 6 elements
+   m_pMessage->commandData.cartesianWrenchFeedForward.element_count = 6;
+}
 
-bool decode_repeatedDouble(pb_istream_t *stream, const pb_field_t *field,
-      void **arg);
-
-bool encode_repeatedInt(pb_ostream_t *stream, const pb_field_t *field,
-      void * const *arg);
-
-bool decode_repeatedInt(pb_istream_t *stream, const pb_field_t *field,
-      void **arg);
-
-void map_repeatedDouble(eNanopbCallbackDirection dir, int numDOF,
-      pb_callback_t *values, tRepeatedDoubleArguments *arg);
-
-void map_repeatedInt(eNanopbCallbackDirection dir, int numDOF,
-      pb_callback_t *values, tRepeatedIntArguments *arg);
-
-void init_repeatedDouble(tRepeatedDoubleArguments *arg);
-
-void init_repeatedInt(tRepeatedIntArguments *arg);
-
-void free_repeatedDouble(tRepeatedDoubleArguments *arg);
-
-void free_repeatedInt(tRepeatedIntArguments *arg);
-
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
-
-#endif
+//******************************************************************************
+bool CommandMessageEncoder::encode(char* buffer, int& size)
+{
+    // generate stream for encoding
+    pb_ostream_t stream = pb_ostream_from_buffer((uint8_t*)buffer, FRI_COMMAND_MSG_MAX_SIZE);
+    // encode monitoring Message to stream
+    bool status = pb_encode(&stream, FRICommandMessage_fields, m_pMessage);
+    size = stream.bytes_written;
+    if (!status)
+    {
+        printf("!!encoding error: %s!!\n", PB_GET_ERROR(&stream));
+    }
+    return status;
+}

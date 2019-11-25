@@ -58,88 +58,63 @@ cost of any service and repair.
 \version {1.15}
 */
 #include <cstdio>
-#include "protobuf/friMonitoringMessageDecoder.h"
-#include "pb_decode.h"
-
+#include <friLBRClient.h>
+#include <friClientData.h>
 
 using namespace KUKA::FRI;
+char FRIException::_buffer[1024] = { 0 };
 
 //******************************************************************************
-MonitoringMessageDecoder::MonitoringMessageDecoder(FRIMonitoringMessage* pMessage, int num)
-   : m_nNum(num), m_pMessage(pMessage)
+LBRClient::LBRClient()
 {
-   initMessage();
+   
 }
 
 //******************************************************************************
-MonitoringMessageDecoder::~MonitoringMessageDecoder()
+LBRClient::~LBRClient()
 {
-
+   
 }
 
 //******************************************************************************
-void MonitoringMessageDecoder::initMessage()
+void LBRClient::onStateChange(ESessionState oldState, ESessionState newState)
 {
-   // set initial data
-   // it is assumed that no robot information and monitoring data is available and therefore the 
-   // optional fields are initialized with false
-   m_pMessage->has_robotInfo = false;
-   m_pMessage->has_monitorData = false;
-   m_pMessage->has_connectionInfo = true;
-   m_pMessage->has_ipoData = false;
-   m_pMessage->requestedTransformations_count = 0;
-   m_pMessage->has_endOfMessageData = false;
-   
-   
-   m_pMessage->header.messageIdentifier = 0;
-   m_pMessage->header.reflectedSequenceCounter = 0;
-   m_pMessage->header.sequenceCounter = 0;
-
-   m_pMessage->connectionInfo.sessionState = FRISessionState_IDLE;
-   m_pMessage->connectionInfo.quality = FRIConnectionQuality_POOR;
-
-   m_pMessage->monitorData.readIORequest_count = 0;
-
-   // allocate and map memory for protobuf repeated structures
-   map_repeatedDouble(FRI_MANAGER_NANOPB_DECODE, m_nNum, 
-         &m_pMessage->monitorData.measuredJointPosition.value,
-         &m_tSendContainer.m_AxQMsrLocal);
-   
-   map_repeatedDouble(FRI_MANAGER_NANOPB_DECODE, m_nNum, 
-         &m_pMessage->monitorData.measuredTorque.value,
-         &m_tSendContainer.m_AxTauMsrLocal);
-   
-   map_repeatedDouble(FRI_MANAGER_NANOPB_DECODE, m_nNum, 
-         &m_pMessage->monitorData.commandedJointPosition.value,
-         &m_tSendContainer.m_AxQCmdT1mLocal);
-   
-   map_repeatedDouble(FRI_MANAGER_NANOPB_DECODE, m_nNum, 
-         &m_pMessage->monitorData.commandedTorque.value,
-         &m_tSendContainer.m_AxTauCmdLocal);
-   
-   map_repeatedDouble(FRI_MANAGER_NANOPB_DECODE, m_nNum, 
-         &m_pMessage->monitorData.externalTorque.value,
-         &m_tSendContainer.m_AxTauExtMsrLocal);
-   
-   map_repeatedDouble(FRI_MANAGER_NANOPB_DECODE,m_nNum,
-         &m_pMessage->ipoData.jointPosition.value,
-         &m_tSendContainer.m_AxQCmdIPO);
-
-   map_repeatedInt(FRI_MANAGER_NANOPB_DECODE, m_nNum, 
-         &m_pMessage->robotInfo.driveState,
-         &m_tSendContainer.m_AxDriveStateLocal);
+   // TODO: String converter function for states
+   printf("LBRiiwaClient state changed from %d to %d\n", oldState, newState);
 }
 
 //******************************************************************************
-bool MonitoringMessageDecoder::decode(char* buffer, int size)
+void LBRClient::monitor()
 {
-    pb_istream_t stream = pb_istream_from_buffer((uint8_t*)buffer, size);
-
-    bool status = pb_decode(&stream, FRIMonitoringMessage_fields, m_pMessage);
-    if (!status)
-    {
-        printf("!!decoding error: %s!!\n", PB_GET_ERROR(&stream));
-    }
-
-    return status;
+   robotCommand().setJointPosition(robotState().getCommandedJointPosition());
 }
+
+//******************************************************************************
+void LBRClient::waitForCommand()
+{
+   robotCommand().setJointPosition(robotState().getIpoJointPosition());
+}
+
+//******************************************************************************
+void LBRClient::command()
+{
+   robotCommand().setJointPosition(robotState().getIpoJointPosition());
+}
+
+//******************************************************************************
+ClientData* LBRClient::createData()
+{
+   ClientData* data = new ClientData(_robotState.NUMBER_OF_JOINTS);
+   
+   // link monitoring and command message to wrappers
+   _robotState._message = &data->monitoringMsg;
+   _robotCommand._cmdMessage = &data->commandMsg;
+   _robotCommand._monMessage = &data->monitoringMsg;
+
+   // set specific message IDs
+   data->expectedMonitorMsgID = _robotState.LBRMONITORMESSAGEID;
+   data->commandMsg.header.messageIdentifier = _robotCommand.LBRCOMMANDMESSAGEID;
+   
+   return data;
+}
+

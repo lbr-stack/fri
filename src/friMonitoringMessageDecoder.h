@@ -57,64 +57,77 @@ cost of any service and repair.
 \file
 \version {1.15}
 */
-#include <cstdio>
-#include "friLBRClient.h"
-#include "base/friClientData.h"
+#ifndef _KUKA_FRI_MONITORINGMESSAGEDECODER_H
+#define _KUKA_FRI_MONITORINGMESSAGEDECODER_H
 
-using namespace KUKA::FRI;
-char FRIException::_buffer[1024] = { 0 };
+#include <FRIMessages.pb.h>
+#include <pb_frimessages_callbacks.h>
 
-//******************************************************************************
-LBRClient::LBRClient()
+
+namespace KUKA
 {
+namespace FRI
+{
+
+   static const int FRI_MONITOR_MSG_MAX_SIZE = 1500;   //!< max size of a FRI monitoring message
    
-}
 
-//******************************************************************************
-LBRClient::~LBRClient()
-{
+   class MonitoringMessageDecoder
+   {
+
+   public:
+
+      MonitoringMessageDecoder(FRIMonitoringMessage* pMessage, int num);
+    
+      ~MonitoringMessageDecoder();
+    
+      bool decode(char* buffer, int size);
+    
+    
+   private:
+    
+      struct LocalMonitoringDataContainer
+      {
+         tRepeatedDoubleArguments m_AxQMsrLocal;
+         tRepeatedDoubleArguments m_AxTauMsrLocal;
+         tRepeatedDoubleArguments m_AxQCmdT1mLocal;
+         tRepeatedDoubleArguments m_AxTauCmdLocal;
+         tRepeatedDoubleArguments m_AxTauExtMsrLocal;
+         tRepeatedIntArguments m_AxDriveStateLocal;        
+         tRepeatedDoubleArguments m_AxQCmdIPO;
+        
+         LocalMonitoringDataContainer()
+         {
+            init_repeatedDouble(&m_AxQMsrLocal);
+            init_repeatedDouble(&m_AxTauMsrLocal);
+            init_repeatedDouble(&m_AxQCmdT1mLocal);
+            init_repeatedDouble(&m_AxTauCmdLocal);
+            init_repeatedDouble(&m_AxTauExtMsrLocal);
+            init_repeatedDouble(&m_AxQCmdIPO);
+            init_repeatedInt(&m_AxDriveStateLocal);
+         }
+         
+         ~LocalMonitoringDataContainer()
+         {
+            free_repeatedDouble(&m_AxQMsrLocal);
+            free_repeatedDouble(&m_AxTauMsrLocal);
+            free_repeatedDouble(&m_AxQCmdT1mLocal);
+            free_repeatedDouble(&m_AxTauCmdLocal);
+            free_repeatedDouble(&m_AxTauExtMsrLocal);
+            free_repeatedDouble(&m_AxQCmdIPO);
+            free_repeatedInt(&m_AxDriveStateLocal);
+         }
+      };
+
+      int m_nNum;
+
+      LocalMonitoringDataContainer m_tSendContainer;
+      FRIMonitoringMessage* m_pMessage;
+       
+      void initMessage();
+   };
+
+}
+}
    
-}
-
-//******************************************************************************
-void LBRClient::onStateChange(ESessionState oldState, ESessionState newState)
-{
-   // TODO: String converter function for states
-   printf("LBRiiwaClient state changed from %d to %d\n", oldState, newState);
-}
-
-//******************************************************************************
-void LBRClient::monitor()
-{
-   robotCommand().setJointPosition(robotState().getCommandedJointPosition());
-}
-
-//******************************************************************************
-void LBRClient::waitForCommand()
-{
-   robotCommand().setJointPosition(robotState().getIpoJointPosition());
-}
-
-//******************************************************************************
-void LBRClient::command()
-{
-   robotCommand().setJointPosition(robotState().getIpoJointPosition());
-}
-
-//******************************************************************************
-ClientData* LBRClient::createData()
-{
-   ClientData* data = new ClientData(_robotState.NUMBER_OF_JOINTS);
-   
-   // link monitoring and command message to wrappers
-   _robotState._message = &data->monitoringMsg;
-   _robotCommand._cmdMessage = &data->commandMsg;
-   _robotCommand._monMessage = &data->monitoringMsg;
-
-   // set specific message IDs
-   data->expectedMonitorMsgID = _robotState.LBRMONITORMESSAGEID;
-   data->commandMsg.header.messageIdentifier = _robotCommand.LBRCOMMANDMESSAGEID;
-   
-   return data;
-}
-
+#endif // _KUKA_FRI_MONITORINGMESSAGEDECODER_H

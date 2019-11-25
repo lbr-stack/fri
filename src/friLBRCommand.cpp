@@ -57,65 +57,57 @@ cost of any service and repair.
 \file
 \version {1.15}
 */
-#include <cstdio>
-#include "protobuf/friCommandMessageEncoder.h"
-#include "pb_encode.h"
+#include <friLBRState.h>
+#include <friLBRCommand.h>
+#include <friClientData.h>
+#include <pb_frimessages_callbacks.h>
 
 using namespace KUKA::FRI;
 
 //******************************************************************************
-CommandMessageEncoder::CommandMessageEncoder(FRICommandMessage* pMessage, int num)
-   : m_nNum(num), m_pMessage(pMessage)
+void LBRCommand::setJointPosition(const double* values)
 {
-   initMessage();
+   _cmdMessage->has_commandData = true;
+   _cmdMessage->commandData.has_jointPosition = true;
+   tRepeatedDoubleArguments *dest =
+            (tRepeatedDoubleArguments*)_cmdMessage->commandData.jointPosition.value.arg;
+   memcpy(dest->value, values, LBRState::NUMBER_OF_JOINTS * sizeof(double));
 }
 
 //******************************************************************************
-CommandMessageEncoder::~CommandMessageEncoder()
+void LBRCommand::setWrench(const double* wrench)
 {
+   _cmdMessage->has_commandData = true;
+   _cmdMessage->commandData.has_cartesianWrenchFeedForward = true;
 
+   double *dest = _cmdMessage->commandData.cartesianWrenchFeedForward.element;
+   memcpy(dest, wrench, 6 * sizeof(double));
+}
+//******************************************************************************
+void LBRCommand::setTorque(const double* torques)
+{
+   _cmdMessage->has_commandData = true;
+   _cmdMessage->commandData.has_jointTorque= true;
+
+   tRepeatedDoubleArguments *dest =
+              (tRepeatedDoubleArguments*)_cmdMessage->commandData.jointTorque.value.arg;
+   memcpy(dest->value, torques, LBRState::NUMBER_OF_JOINTS * sizeof(double));
 }
 
 //******************************************************************************
-void CommandMessageEncoder::initMessage()
+void LBRCommand::setBooleanIOValue(const char* name, const bool value)
 {
-   m_pMessage->has_commandData = false;
-   m_pMessage->has_endOfMessageData = false;
-   m_pMessage->commandData.has_jointPosition = false;
-   m_pMessage->commandData.has_cartesianWrenchFeedForward = false;
-   m_pMessage->commandData.has_jointTorque = false;
-   m_pMessage->commandData.commandedTransformations_count = 0;
-   m_pMessage->header.messageIdentifier = 0;
-   // init with 0. Necessary for creating the correct reflected sequence count in the monitoring msg
-   m_pMessage->header.sequenceCounter = 0;
-   m_pMessage->header.reflectedSequenceCounter = 0;
-
-   m_pMessage->commandData.writeIORequest_count = 0;
-
-   // allocate and map memory for protobuf repeated structures
-   map_repeatedDouble(FRI_MANAGER_NANOPB_ENCODE, m_nNum, 
-         &m_pMessage->commandData.jointPosition.value,
-         &m_tRecvContainer.jointPosition);
-   map_repeatedDouble(FRI_MANAGER_NANOPB_ENCODE, m_nNum, 
-         &m_pMessage->commandData.jointTorque.value,
-         &m_tRecvContainer.jointTorque);
-   
-   // nanopb encoding needs to know how many elements the static array contains
-   // a Cartesian wrench feed forward vector always contains 6 elements
-   m_pMessage->commandData.cartesianWrenchFeedForward.element_count = 6;
+   ClientData::setBooleanIOValue(_cmdMessage, name, value, _monMessage);
 }
 
 //******************************************************************************
-bool CommandMessageEncoder::encode(char* buffer, int& size)
+void LBRCommand::setAnalogIOValue(const char* name, const double value)
 {
-    // generate stream for encoding
-    pb_ostream_t stream = pb_ostream_from_buffer((uint8_t*)buffer, FRI_COMMAND_MSG_MAX_SIZE);
-    // encode monitoring Message to stream
-    bool status = pb_encode(&stream, FRICommandMessage_fields, m_pMessage);
-    size = stream.bytes_written;
-    if (!status)
-    {
-        printf("!!encoding error: %s!!\n", PB_GET_ERROR(&stream));
-    }
-    return status;
+   ClientData::setAnalogIOValue(_cmdMessage, name, value, _monMessage);
+}
+
+//******************************************************************************
+void LBRCommand::setDigitalIOValue(const char* name, const unsigned long long value)
+{
+   ClientData::setDigitalIOValue(_cmdMessage, name, value, _monMessage);
 }

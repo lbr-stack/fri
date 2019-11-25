@@ -57,57 +57,89 @@ cost of any service and repair.
 \file
 \version {1.15}
 */
-#include "friLBRState.h"
-#include "friLBRCommand.h"
-#include "base/friClientData.h"
-#include "protobuf/pb_frimessages_callbacks.h"
+#include <cstdio>
+#include <friMonitoringMessageDecoder.h>
+#include <pb_decode.h>
+
 
 using namespace KUKA::FRI;
 
 //******************************************************************************
-void LBRCommand::setJointPosition(const double* values)
+MonitoringMessageDecoder::MonitoringMessageDecoder(FRIMonitoringMessage* pMessage, int num)
+   : m_nNum(num), m_pMessage(pMessage)
 {
-   _cmdMessage->has_commandData = true;
-   _cmdMessage->commandData.has_jointPosition = true;
-   tRepeatedDoubleArguments *dest =
-            (tRepeatedDoubleArguments*)_cmdMessage->commandData.jointPosition.value.arg;
-   memcpy(dest->value, values, LBRState::NUMBER_OF_JOINTS * sizeof(double));
+   initMessage();
 }
 
 //******************************************************************************
-void LBRCommand::setWrench(const double* wrench)
+MonitoringMessageDecoder::~MonitoringMessageDecoder()
 {
-   _cmdMessage->has_commandData = true;
-   _cmdMessage->commandData.has_cartesianWrenchFeedForward = true;
 
-   double *dest = _cmdMessage->commandData.cartesianWrenchFeedForward.element;
-   memcpy(dest, wrench, 6 * sizeof(double));
-}
-//******************************************************************************
-void LBRCommand::setTorque(const double* torques)
-{
-   _cmdMessage->has_commandData = true;
-   _cmdMessage->commandData.has_jointTorque= true;
-
-   tRepeatedDoubleArguments *dest =
-              (tRepeatedDoubleArguments*)_cmdMessage->commandData.jointTorque.value.arg;
-   memcpy(dest->value, torques, LBRState::NUMBER_OF_JOINTS * sizeof(double));
 }
 
 //******************************************************************************
-void LBRCommand::setBooleanIOValue(const char* name, const bool value)
+void MonitoringMessageDecoder::initMessage()
 {
-   ClientData::setBooleanIOValue(_cmdMessage, name, value, _monMessage);
+   // set initial data
+   // it is assumed that no robot information and monitoring data is available and therefore the 
+   // optional fields are initialized with false
+   m_pMessage->has_robotInfo = false;
+   m_pMessage->has_monitorData = false;
+   m_pMessage->has_connectionInfo = true;
+   m_pMessage->has_ipoData = false;
+   m_pMessage->requestedTransformations_count = 0;
+   m_pMessage->has_endOfMessageData = false;
+   
+   
+   m_pMessage->header.messageIdentifier = 0;
+   m_pMessage->header.reflectedSequenceCounter = 0;
+   m_pMessage->header.sequenceCounter = 0;
+
+   m_pMessage->connectionInfo.sessionState = FRISessionState_IDLE;
+   m_pMessage->connectionInfo.quality = FRIConnectionQuality_POOR;
+
+   m_pMessage->monitorData.readIORequest_count = 0;
+
+   // allocate and map memory for protobuf repeated structures
+   map_repeatedDouble(FRI_MANAGER_NANOPB_DECODE, m_nNum, 
+         &m_pMessage->monitorData.measuredJointPosition.value,
+         &m_tSendContainer.m_AxQMsrLocal);
+   
+   map_repeatedDouble(FRI_MANAGER_NANOPB_DECODE, m_nNum, 
+         &m_pMessage->monitorData.measuredTorque.value,
+         &m_tSendContainer.m_AxTauMsrLocal);
+   
+   map_repeatedDouble(FRI_MANAGER_NANOPB_DECODE, m_nNum, 
+         &m_pMessage->monitorData.commandedJointPosition.value,
+         &m_tSendContainer.m_AxQCmdT1mLocal);
+   
+   map_repeatedDouble(FRI_MANAGER_NANOPB_DECODE, m_nNum, 
+         &m_pMessage->monitorData.commandedTorque.value,
+         &m_tSendContainer.m_AxTauCmdLocal);
+   
+   map_repeatedDouble(FRI_MANAGER_NANOPB_DECODE, m_nNum, 
+         &m_pMessage->monitorData.externalTorque.value,
+         &m_tSendContainer.m_AxTauExtMsrLocal);
+   
+   map_repeatedDouble(FRI_MANAGER_NANOPB_DECODE,m_nNum,
+         &m_pMessage->ipoData.jointPosition.value,
+         &m_tSendContainer.m_AxQCmdIPO);
+
+   map_repeatedInt(FRI_MANAGER_NANOPB_DECODE, m_nNum, 
+         &m_pMessage->robotInfo.driveState,
+         &m_tSendContainer.m_AxDriveStateLocal);
 }
 
 //******************************************************************************
-void LBRCommand::setAnalogIOValue(const char* name, const double value)
+bool MonitoringMessageDecoder::decode(char* buffer, int size)
 {
-   ClientData::setAnalogIOValue(_cmdMessage, name, value, _monMessage);
-}
+    pb_istream_t stream = pb_istream_from_buffer((uint8_t*)buffer, size);
 
-//******************************************************************************
-void LBRCommand::setDigitalIOValue(const char* name, const unsigned long long value)
-{
-   ClientData::setDigitalIOValue(_cmdMessage, name, value, _monMessage);
+    bool status = pb_decode(&stream, FRIMonitoringMessage_fields, m_pMessage);
+    if (!status)
+    {
+        printf("!!decoding error: %s!!\n", PB_GET_ERROR(&stream));
+    }
+
+    return status;
 }
