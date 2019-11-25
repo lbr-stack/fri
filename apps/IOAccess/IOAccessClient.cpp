@@ -60,8 +60,8 @@ cost of any service and repair.
 #include <cstdio>
 
 #include <IOAccessClient.h>
-#include <friLBRState.h>
-#include <friLBRCommand.h>
+#include <fri/friLBRState.h>
+#include <fri/friLBRCommand.h>
 
 using namespace KUKA::FRI;
 //******************************************************************************

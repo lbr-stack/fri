@@ -59,7 +59,7 @@ cost of any service and repair.
 #ifndef _KUKA_FRI_TRANSFORMATION_PROVIDER_CLIENT_H
 #define _KUKA_FRI_TRANSFORMATION_PROVIDER_CLIENT_H
 
-#include <friTransformationClient.h>
+#include <fri/friTransformationClient.h>
 
 
 

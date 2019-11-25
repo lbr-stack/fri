@@ -61,7 +61,7 @@ cost of any service and repair.
 #include <cstring>
 #include <cstdio>
 
-#include <friTransformationClient.h>
+#include <fri/friTransformationClient.h>
 #include <friClientData.h>
 
 #include <FRIMessages.pb.h>

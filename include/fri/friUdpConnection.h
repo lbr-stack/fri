@@ -78,7 +78,7 @@ cost of any service and repair.
    #include <arpa/inet.h>
 #endif
 
-#include <friConnectionIf.h>
+#include <fri/friConnectionIf.h>
 
 /** Kuka namespace */
 namespace KUKA

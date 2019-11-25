@@ -63,7 +63,7 @@ cost of any service and repair.
 #include <unistd.h>
 #endif
 
-#include <friUdpConnection.h>
+#include <fri/friUdpConnection.h>
 
 
 #ifdef WIN32

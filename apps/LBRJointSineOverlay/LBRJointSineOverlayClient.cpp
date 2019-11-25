@@ -60,7 +60,7 @@ cost of any service and repair.
 #include <cstring>
 #include <cstdio>
 #include <LBRJointSineOverlayClient.h>
-#include <friLBRState.h>
+#include <fri/friLBRState.h>
 // Visual studio needs extra define to use math constants
 #define _USE_MATH_DEFINES
 #include <math.h>

@@ -5,7 +5,7 @@ if(${CMAKE_VERSION} VERSION_LESS 3.12)
     cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
 endif()
 
-project(nanopb VERSION 0.2.8
+project(libnanopb VERSION 0.2.8
     DESCRIPTION "Nanopb - Protocol Buffers for Embedded Systems."
     LANGUAGES C
 )
@@ -19,6 +19,10 @@ add_library(nanopb
     src/pb_encode.c
 )
 
+### Create an alias so that one can link against this library inside build tree
+add_library(NanoPB::nanopb ALIAS nanopb)
+
+### Set target properties
 target_include_directories(nanopb
     PUBLIC
         $<INSTALL_INTERFACE:include>

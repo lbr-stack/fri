@@ -60,7 +60,7 @@ cost of any service and repair.
 #ifndef _KUKA_FRI_MY_LBR_CLIENT_H
 #define _KUKA_FRI_MY_LBR_CLIENT_H
 
-#include <friLBRClient.h>
+#include <fri/friLBRClient.h>
 
 
 

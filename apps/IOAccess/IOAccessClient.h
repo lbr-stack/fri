@@ -60,8 +60,8 @@ cost of any service and repair.
 #define _KUKA_FRI_IOACCESS_CLIENT_H
 
 #include <time.h>
-#include <friLBRClient.h>
-#include <friClientIf.h>
+#include <fri/friLBRClient.h>
+#include <fri/friClientIf.h>
 
 /**
  * \brief Example client for Fieldbus access.

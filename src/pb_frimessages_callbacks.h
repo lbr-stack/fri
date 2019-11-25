@@ -64,7 +64,7 @@ cost of any service and repair.
 extern "C" {
 #endif
 
-#include <pb.h>
+#include <nanopb/pb.h>
 #include <FRIMessages.pb.h>
 
 /** container for repeated double elements */

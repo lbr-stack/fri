@@ -60,7 +60,7 @@ cost of any service and repair.
 #ifndef _KUKA_SIMULATED_TRANSFORMATION_PROVIDER_H
 #define _KUKA_SIMULATED_TRANSFORMATION_PROVIDER_H
 
-#include <friTransformationClient.h>
+#include <fri/friTransformationClient.h>
 
 /**
  * \brief Test client that sends back simulated transformations corresponding to a

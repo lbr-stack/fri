@@ -61,7 +61,7 @@ cost of any service and repair.
 #define _KUKA_FRI_TRANSFORMATION_CLIENT_H
 
 #include <vector>
-#include <friClientIf.h>
+#include <fri/friClientIf.h>
 
 /** Kuka namespace */
 namespace KUKA

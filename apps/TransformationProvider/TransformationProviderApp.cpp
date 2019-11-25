@@ -60,9 +60,9 @@ cost of any service and repair.
 #include <cstdio>
 #include <cstring> // strstr
 #include <TransformationProviderClient.h>
-#include <friUdpConnection.h>
-#include <friClientApplication.h>
-#include <friLBRClient.h>
+#include <fri/friUdpConnection.h>
+#include <fri/friClientApplication.h>
+#include <fri/friLBRClient.h>
 
 using namespace KUKA::FRI;
 

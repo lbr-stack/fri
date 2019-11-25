@@ -57,8 +57,8 @@ cost of any service and repair.
 \file
 \version {1.15}
 */
-#include <friLBRState.h>
-#include <friLBRCommand.h>
+#include <fri/friLBRState.h>
+#include <fri/friLBRCommand.h>
 #include <friClientData.h>
 #include <pb_frimessages_callbacks.h>
 

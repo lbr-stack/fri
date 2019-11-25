@@ -60,7 +60,7 @@ cost of any service and repair.
 #ifndef _KUKA_FRI_LBR_WRENCH_SINE_OVERLAY_CLIENT_H
 #define _KUKA_FRI_LBR_WRENCH_SINE_OVERLAY_CLIENT_H
 
-#include <friLBRClient.h>
+#include <fri/friLBRClient.h>
 
 
 

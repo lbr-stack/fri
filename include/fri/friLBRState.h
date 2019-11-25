@@ -60,7 +60,7 @@ cost of any service and repair.
 #ifndef _KUKA_FRI_LBR_STATE_H
 #define _KUKA_FRI_LBR_STATE_H
 
-#include <friClientIf.h>
+#include <fri/friClientIf.h>
 
 // forward declarations
 typedef struct _FRIMonitoringMessage FRIMonitoringMessage;
