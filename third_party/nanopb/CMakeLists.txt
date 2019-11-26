@@ -19,6 +19,32 @@ add_library(nanopb
     src/pb_encode.c
 )
 
+### Add compile options, similar to https://stackoverflow.com/questions/45955272/modern-way-to-set-compiler-flags-in-cross-platform-cmake-project
+if(MSVC)
+    target_compile_options(nanopb
+        PUBLIC
+            -DPB_SYSTEM_HEADER=<nanopb/pb_syshdr_win.h>
+            -DPB_FIELD_16BIT
+            -DWIN32
+            -DHAVE_STDINT_H
+            -DHAVE_STDBOOL_H
+    )
+else()
+    target_compile_options(nanopb
+        PUBLIC
+            -O2
+            -Wall
+            -DHAVE_SCOCKLEN_T
+            -DPB_SYSTEM_HEADER=<nanopb/pb_syshdr.h>
+            -DPB_FIELD_16BIT
+            -DHAVE_STDINT_H
+            -DHAVE_STDDEF_H
+            -DHAVE_STDBOOL_H
+            -DHAVE_STDLIB_H
+            -DHAVE_STRING_H 
+    ) 
+endif()
+
 ### Create an alias so that one can link against this library inside build tree
 add_library(NanoPB::nanopb ALIAS nanopb)
 
