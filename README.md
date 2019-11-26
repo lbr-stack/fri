@@ -20,8 +20,7 @@ Build and install the FRI library
 cd FastRobotInterface
 mkdir build && cd build
 cmake ..
-cmake --build # builds the FRI library
-cmake --install # installs the FRI library
+cmake --build . --config Release --target install # builds and installs the FRI library in Release mode
 ```
 ## Usage
 The FRI runs Java on the server side, which is the robot controller. 
