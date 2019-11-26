@@ -5,7 +5,7 @@ if(${CMAKE_VERSION} VERSION_LESS 3.12)
     cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
 endif()
 
-project(friclient VERSION 1.0.0
+project(FastRobotInterface VERSION 1.0.0
         DESCRIPTION "KUKA's Fast Robot Interface."
         LANGUAGES C CXX)
 
