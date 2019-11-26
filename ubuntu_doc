@@ -1,0 +1,37 @@
+plain ubuntu does not support project description
+
+project(friclient VERSION 1.0.0
+        LANGUAGES C CXX
+)
+
+in src/friUdpConnection.cpp, HAVE_SOCKLEN_T is not defined for ubuntu. Has to be set in cmake somehow
+
+#ifdef HAVE_SOCKLEN_T
+      socklen_t sockAddrSize;
+#else
+      int sockAddrSize;
+#endif
+
+Add -Wall flag to silence warnings, e.g. https://stackoverflow.com/questions/14231292/cmake-and-compiler-warnings
+
+if ( CMAKE_COMPILER_IS_GNUCC )
+    target_compile_options(main PRIVATE "-Wall -Wextra")
+endif()
+if ( MSVC )
+    target_compile_options(main PRIVATE "/W4")
+endif()
+
+not possible, however, maybe changes depending on compile flags, given by initial build strategy
+
+
+installed to /user/local
+
+build with
+cmake -DCMAKE_PREFIX_PATH='/usr/local' ..
+make
+
+execute with ./lbrjointsineoverlay
+
+Network
+
+System Settings -> Network -> Wired -> Options -> IPv4 Settings -> Address 172.31.1.148 Netmask 255.255.0.0
