@@ -9,9 +9,6 @@ project(FastRobotInterface VERSION 1.0.0
         DESCRIPTION "KUKA's Fast Robot Interface."
         LANGUAGES C CXX)
 
-### Put definitions
-add_definitions(-DPB_FIELD_16BIT) # undefine STATIC_ASSERT in src/FRIMessages.pb.c
-
 ### Append CMAKE_MODULE_PATH by custom find file
 list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_SOURCE_DIR}/cmake)
 
