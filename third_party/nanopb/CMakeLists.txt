@@ -22,7 +22,7 @@ add_library(nanopb
 ### Add compile options, similar to https://stackoverflow.com/questions/45955272/modern-way-to-set-compiler-flags-in-cross-platform-cmake-project
 if(MSVC)
     target_compile_options(nanopb
-        PUBLIC
+        PRIVATE
             -DPB_SYSTEM_HEADER=<nanopb/pb_syshdr_win.h>
             -DPB_FIELD_16BIT
             -DWIN32
@@ -31,7 +31,7 @@ if(MSVC)
     )
 else()
     target_compile_options(nanopb
-        PUBLIC
+        PRIVATE
             -O2
             -Wall
             -DHAVE_SCOCKLEN_T
