@@ -30,6 +30,32 @@ add_library(fri
     src/pb_frimessages_callbacks.c
 )
 
+### Add compile options, similar to https://stackoverflow.com/questions/45955272/modern-way-to-set-compiler-flags-in-cross-platform-cmake-project
+if(MSVC)
+    target_compile_options(fri
+        PRIVATE
+            -DPB_SYSTEM_HEADER=<nanopb/pb_syshdr_win.h>
+            -DPB_FIELD_16BIT
+            -DWIN32
+            -DHAVE_STDINT_H
+            -DHAVE_STDBOOL_H
+    )
+else()
+    target_compile_options(fri
+        PRIVATE
+            -O2
+            -Wall
+            -DHAVE_SCOCKLEN_T
+            -DPB_SYSTEM_HEADER=<nanopb/pb_syshdr.h>
+            -DPB_FIELD_16BIT
+            -DHAVE_STDINT_H
+            -DHAVE_STDDEF_H
+            -DHAVE_STDBOOL_H
+            -DHAVE_STDLIB_H
+            -DHAVE_STRING_H 
+    ) 
+endif()
+
 target_include_directories(fri
     PUBLIC
         $<INSTALL_INTERFACE:include>
