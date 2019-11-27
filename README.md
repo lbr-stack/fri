@@ -61,7 +61,23 @@ cmake -DCMAKE_PREFIX_PATH='path/to/lib' # on Windows this should be 'C:\Program 
 cmake --build . --config Release        # builds the apps in Release mode
 ```
 #### Run the Apps
-* Run via smartHMI
-* Run via terminal, setup IP
+To run one of the example [apps](https://github.com/KCL-BMEIS/FastRobotInterface/tree/master/apps), they have to be started on the smartHMI (KUKA's smartpad), as well as on the laptop.
+* On the smartHMI
+  * Select an Application (left below), e.g. the LBRJointSineOverlay
+  * Press one of the enabling switches half way (grey buttons on the back of the smartHMI). The joint control A1-A7 will light up (center below)
+  * Press and hold the play button (below right), and the enabling switch
+<br>
+<figure>
+    <p align="center"><img src="img/select_app_highlighted.png" width="25%" height="25%" hspace="20"><img   src="img/joint_sine_overlay_enable_highlighted.png" width="25%" height="25%" hspace="20"><img src="img/joint_sine_overlay_running_highlighted.png" width="25%" height="25%" hspace="20"></p>
+  <figcaption></figcaption>
+</figure>
+<br><br>
 
+* On the laptop open a terminal, and run
+
+```shell
+cd apps/build         # on Linux 
+cd apps/build/Release # on Windows
+./lbrjointsineoverlay
+```
 The robot should now be controlled by your Laptop, well done 😄! For open questions please leave an [Issue](https://github.com/KCL-BMEIS/FastRobotInterface/issues).
