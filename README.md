@@ -20,7 +20,8 @@ git clone https://github.com/KCL-BMEIS/FastRobotInterface.git
 Build and install the FRI library
 ```shell
 cd FastRobotInterface
-mkdir build && cd build
+mkdir build
+cd build
 cmake ..
 cmake --build . --config Release --target install # builds and installs the FRI library in Release mode
 ```
@@ -53,7 +54,8 @@ The FRI has to be installed on the controller. Therefore, the [Sunrise Workbench
 The client side requires to build the [apps](https://github.com/KCL-BMEIS/FastRobotInterface/tree/master/apps). For the [apps](https://github.com/KCL-BMEIS/FastRobotInterface/tree/master/apps) to run, the FRI must have been installed according to [Build and Installation](#build-and-installation). Then, open a terminal and do
 ```shell
 cd apps
-mkdir build && cd build
+mkdir build
+cd build
 cmake -DCMAKE_PREFIX_PATH='path/to/lib' # on Windows this should be 'C:\Program Files (x86)\FastRobotInterface'
                                         # on Linux this should be '/usr/local'
 cmake --build . --config Release        # builds the apps in Release mode
