@@ -62,7 +62,7 @@ You will have to follow the instructions in [Connect Laptop](#connect-laptop). T
   * Double click the StationSetup.cat under FRI in the Package Explorer and add the LBR Med 7 R800 to the Topolgy (below left)
   * Remove the LBR_Med_7_R800_2, which has no Media Flange, and which we are not using (below right)
     <figure>
-        <p align="center"><img src="img/sunrise_workbench_fri_topology_highlighted.png" width="45%" height="45%" hspace="20"><img src="img/sunrise_workbench_fri_topology_remove_2_highlighted.png" width="45%" height="45%" hspace="20"></p>
+      <p align="center"><img src="img/sunrise_workbench_fri_topology_highlighted.png" width="45%" height="45%" hspace="20"><img src="img/sunrise_workbench_fri_topology_remove_2_highlighted.png" width="45%" height="45%" hspace="20"></p>
       <figcaption></figcaption>
     </figure>
   * In the Software tab, make sure that the checker boxes for the FRI extensions are selected (below left) 
@@ -78,7 +78,6 @@ You will have to follow the instructions in [Connect Laptop](#connect-laptop). T
       <p align="center"><img src="img/sunrise_workbench_fri_installation_highlighted.png" width="45%" height="45%" hspace="20"><img src="img/sunrise_workbench_fri_synchronize_highlighted.png" width="45%" height="45%" hspace="20"></p>
       <figcaption></figcaption>
     </figure>
-
 #### Client Side - Laptop
 You will have to follow the instructions in [Connect Laptop](#connect-laptop), and make sure that the FRI was installed to the KUKA controller, according to [Server Side - KUKA Controller](#server-side---kuka-controller). The client side requires to build the [apps](https://github.com/KCL-BMEIS/FastRobotInterface/tree/master/apps), which requires that the FRI was installed according to [Build and Installation](#build-and-installation). Then, open a terminal and do
 ```shell
@@ -95,13 +94,11 @@ To run one of the example [apps](https://github.com/KCL-BMEIS/FastRobotInterface
   * Select an Application (left below), e.g. the LBRJointSineOverlay
   * Press one of the enabling switches half way (grey buttons on the back of the smartHMI). The joint control A1-A7 will light up (center below)
   * Press and hold the play button (below right), and the enabling switch
-<br>
-<figure>
-    <p align="center"><img src="img/select_app_highlighted.png" width="25%" height="25%" hspace="20"><img   src="img/joint_sine_overlay_enable_highlighted.png" width="25%" height="25%" hspace="20"><img src="img/joint_sine_overlay_running_highlighted.png" width="25%" height="25%" hspace="20"></p>
-  <figcaption></figcaption>
-</figure>
 <br><br>
-
+  <figure>
+    <p align="center"><img src="img/select_app_highlighted.png" width="25%" height="25%" hspace="20"><img   src="img/joint_sine_overlay_enable_highlighted.png" width="25%" height="25%" hspace="20"><img src="img/joint_sine_overlay_running_highlighted.png" width="25%" height="25%" hspace="20"></p>
+    <figcaption></figcaption>
+  </figure>
 * On the laptop open a terminal, and run
 
 ```shell
