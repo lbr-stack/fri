@@ -20,7 +20,8 @@ git clone https://github.com/KCL-BMEIS/FastRobotInterface.git
 Build and install the FRI library
 ```shell
 cd FastRobotInterface
-mkdir build && cd build
+mkdir build
+cd build
 cmake ..
 cmake --build . --config Release --target install # builds and installs the FRI library in Release mode
 ```
@@ -35,8 +36,19 @@ Sunrise Workbench is KUKA's Java IDE that allows you to program the LBR Med.
 * Follow the install instructions
 ### Example Apps
 Exemplary applications for the C++ client side are located inside the [apps](https://github.com/KCL-BMEIS/FastRobotInterface/tree/master/apps) folder. Each of these apps has a Java equivalent for the server side.
+#### Connect Laptop
+* Connect your laptop, therefore, establish an Ethernet connection to connector X66 at the KUKA controller
+* The KUKA controller's default IP is 172.31.1.147. Configure the same network on your laptop, therefore
+  * On Windows
+    * Search for `View network connections` in Start and open it
+    * Right click on the Ethernet connection and open `Properties`
+    * Double click Internet Protocol Version 4 (TCP/IPv4) and set the IP address to `172.31.1.148` and the Subnet mask to `255.255.0.0`
+  * On Ubuntu 16 (might differ for other Linux distributions)
+    * Search for `System Settings` and open it
+    * Go to Network -> Wired -> Options
+    * Go to the IPv4 Settings tab and set the IP address to `172.31.1.148` and the Netmask to `255.255.0.0` 
 #### Server Side - KUKA Controller
-The FRI has to be installed on the controller. Therefore, the [Sunrise Workbench](#sunrise-workbench) IDE is used. 
+You will have to follow the instructions in [Connect Laptop](#connect-laptop). The FRI has to be installed on the controller. Therefore, the [Sunrise Workbench](#sunrise-workbench) IDE is used. 
 * Open the Sunrise Workbench
 * Create a new project, therefore 
   * Click File -> New -> Sunrise project
@@ -47,19 +59,54 @@ The FRI has to be installed on the controller. Therefore, the [Sunrise Workbench
   * Click Finish (might take some time). Select RoboticsAPI Application, and press Next
   * Click Finish
 * Setup the KUKA controller, therefore
-  * 
-* setup.cat, add lbr, add fri, change ip, install, synchronize
+  * Double click the StationSetup.cat under FRI in the Package Explorer and add the LBR Med 7 R800 to the Topolgy (below left)
+  * Remove the LBR_Med_7_R800_2, which has no Media Flange, and which we are not using (below right)
+    <figure>
+        <p align="center"><img src="img/sunrise_workbench_fri_topology_highlighted.png" width="45%" height="45%" hspace="20"><img src="img/sunrise_workbench_fri_topology_remove_2_highlighted.png" width="45%" height="45%" hspace="20"></p>
+      <figcaption></figcaption>
+    </figure>
+  * In the Software tab, make sure that the checker boxes for the FRI extensions are selected (below left) 
+  * In the Configurations tab, make sure that the IP is set to 172.31.1.147 (below right)
+  * Save the StationSetup.cat via `Ctrl + s`
+    <figure>
+      <p align="center"><img src="img/sunrise_workbench_fri_software_highlighted.png" width="45%" height="45%" hspace="20"><img src="img/sunrise_workbench_fri_configuration_highlighted.png" width="45%" height="45%" hspace="20"></p>
+      <figcaption></figcaption>
+    </figure>
+  * In the Installation tab, click Install (below left)
+  * Synchronize your project with the KUKA controller (below right)
+    <figure>
+      <p align="center"><img src="img/sunrise_workbench_fri_installation_highlighted.png" width="45%" height="45%" hspace="20"><img src="img/sunrise_workbench_fri_synchronize_highlighted.png" width="45%" height="45%" hspace="20"></p>
+      <figcaption></figcaption>
+    </figure>
+
 #### Client Side - Laptop
-The client side requires to build the [apps](https://github.com/KCL-BMEIS/FastRobotInterface/tree/master/apps). For the [apps](https://github.com/KCL-BMEIS/FastRobotInterface/tree/master/apps) to run, the FRI must have been installed according to [Build and Installation](#build-and-installation). Then, open a terminal and do
+You will have to follow the instructions in [Connect Laptop](#connect-laptop), and make sure that the FRI was installed to the KUKA controller, according to [Server Side - KUKA Controller](#server-side---kuka-controller). The client side requires to build the [apps](https://github.com/KCL-BMEIS/FastRobotInterface/tree/master/apps), which requires that the FRI was installed according to [Build and Installation](#build-and-installation). Then, open a terminal and do
 ```shell
 cd apps
-mkdir build && cd build
+mkdir build
+cd build
 cmake -DCMAKE_PREFIX_PATH='path/to/lib' # on Windows this should be 'C:\Program Files (x86)\FastRobotInterface'
                                         # on Linux this should be '/usr/local'
 cmake --build . --config Release        # builds the apps in Release mode
 ```
 #### Run the Apps
-* Run via smartHMI
-* Run via terminal, setup IP
+To run one of the example [apps](https://github.com/KCL-BMEIS/FastRobotInterface/tree/master/apps), they have to be started on the smartHMI (KUKA's smartpad), as well as on the laptop.
+* On the smartHMI
+  * Select an Application (left below), e.g. the LBRJointSineOverlay
+  * Press one of the enabling switches half way (grey buttons on the back of the smartHMI). The joint control A1-A7 will light up (center below)
+  * Press and hold the play button (below right), and the enabling switch
+<br>
+<figure>
+    <p align="center"><img src="img/select_app_highlighted.png" width="25%" height="25%" hspace="20"><img   src="img/joint_sine_overlay_enable_highlighted.png" width="25%" height="25%" hspace="20"><img src="img/joint_sine_overlay_running_highlighted.png" width="25%" height="25%" hspace="20"></p>
+  <figcaption></figcaption>
+</figure>
+<br><br>
 
+* On the laptop open a terminal, and run
+
+```shell
+cd apps/build         # on Linux 
+cd apps/build/Release # on Windows
+./lbrjointsineoverlay
+```
 The robot should now be controlled by your Laptop, well done 😄! For open questions please leave an [Issue](https://github.com/KCL-BMEIS/FastRobotInterface/issues).
