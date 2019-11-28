@@ -1,5 +1,0 @@
-Windows
-Start -> View network connections -> Right click Ethernet -> Properties -> Internet Protocol Version 4 (TCP/IPv4)
-
-Ubuntu
-System Settings -> Network -> Wired -> Options -> IPv4 Settings -> Address 172.31.1.148 Netmask 255.255.0.0
