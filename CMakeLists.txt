@@ -45,7 +45,7 @@ else()
         PRIVATE
             -O2
             -Wall
-            -DHAVE_SCOCKLEN_T
+            -DHAVE_SOCKLEN_T
             -DPB_SYSTEM_HEADER=<nanopb/pb_syshdr.h>
             -DPB_FIELD_16BIT
             -DHAVE_STDINT_H
