@@ -84,9 +84,9 @@ You will have to follow the instructions in [Connect Laptop](#connect-laptop), a
 cd apps
 mkdir build
 cd build
-cmake -DCMAKE_PREFIX_PATH='path/to/lib' # on Windows this should be 'C:\Program Files (x86)\FastRobotInterface'
-                                        # on Linux this should be '/usr/local'
-cmake --build . --config Release        # builds the apps in Release mode
+cmake -DCMAKE_PREFIX_PATH='path/to/lib' .. # on Windows this should be 'C:\Program Files (x86)\FastRobotInterface'
+                                           # on Linux this should be '/usr/local'
+cmake --build . --config Release           # builds the apps in Release mode
 ```
 #### Run the Apps
 To run one of the example [apps](https://github.com/KCL-BMEIS/FastRobotInterface/tree/master/apps), they have to be started on the smartHMI (KUKA's smartpad), as well as on the laptop.
