@@ -57,68 +57,74 @@ cost of any service and repair.
 \file
 \version {1.15}
 */
-#ifndef _KUKA_FRI_LBR_WRENCH_SINE_OVERLAY_CLIENT_H
-#define _KUKA_FRI_LBR_WRENCH_SINE_OVERLAY_CLIENT_H
-
-#include <fri/friLBRClient.h>
+#ifndef _KUKA_FRI_CONNECTION_H
+#define _KUKA_FRI_CONNECTION_H
 
 
-
-/**
- * \brief Test client that can overlay interpolator joint positions with sine waves.
- */
-class LBRWrenchSineOverlayClient : public KUKA::FRI::LBRClient
+/** Kuka namespace */
+namespace KUKA
+{
+namespace FRI
 {
    
-public:
-      
    /**
-    * \brief Constructor.
+    * \brief FRI connection interface. 
     * 
-    * @param freqHzX Sine frequency in hertz of force in X-direction
-    * @param freqHzY Sine frequency in hertz of force in Y-direction
-    * @param amplRadX Sine amplitude in radians of force in X-direction
-    * @param amplRadY Sine amplitude in radians of force in Y-direction
+    * Connections to the KUKA Sunrise controller have to be implemented using
+    * this interface.
     */
-   LBRWrenchSineOverlayClient(double freqHzX, double freqHzY, 
-         double amplRadX, double amplRadY);
+   class IConnection
+   {
    
-   /** 
-    * \brief Destructor.
-    */
-   ~LBRWrenchSineOverlayClient();
-   
-   /**
-    * \brief Callback for FRI state changes.
-    * 
-    * @param oldState
-    * @param newState
-    */
-   virtual void onStateChange(KUKA::FRI::ESessionState oldState, KUKA::FRI::ESessionState newState);
-   
-   /**
-    * \brief Callback for the FRI session state 'Commanding Wait'.
-    */
-   virtual void waitForCommand();
-   
-   /**
-    * \brief Callback for the FRI state 'Commanding Active'.
-    */
-   virtual void command();
+   public:
       
-private:
-   static const int CART_VECTOR_DIM = 6; //!< number of elements in a Cartesian vector
+      /** \brief Virtual destructor. */
+      virtual ~IConnection() {}
    
-   double _freqHzX;        //!< sine frequency x-direction (Hertz)
-   double _freqHzY;        //!< sine frequency y-direction (Hertz)
-   double _amplRadX;       //!< sine amplitude x-direction (radians)
-   double _amplRadY;       //!< sine amplitude y-direction (radians)
-   double _wrench[CART_VECTOR_DIM];      //!< commanded wrench
-   double _stepWidthX;     //!< stepwidth for sine in x-direction
-   double _stepWidthY;     //!< stepwidth for sine in y-direction
-   double _phiX;             //!< current phase for sine in x-direction
-   double _phiY;             //!< current phase for sine in y-direction
+      /**
+       * \brief Open a connection to the KUKA Sunrise controller.
+       * 
+       * @param port The port ID
+       * @param remoteHost The address of the remote host
+       * @return True if connection was established
+       */
+      virtual bool open(int port, const char *remoteHost) = 0;
    
-};
+      /**
+       * \brief Close a connection to the KUKA Sunrise controller.
+       */
+      virtual void close() = 0;
+      
+      /**
+       * \brief Checks whether a connection to the KUKA Sunrise controller is established.
+       * 
+       * @return True if connection is established
+       */
+      virtual bool isOpen() const = 0;
+   
+      /**
+       * \brief Receive a new FRI monitoring message from the KUKA Sunrise controller. 
+       * 
+       * This method blocks until a new message arrives.
+       * @param buffer Pointer to the allocated buffer that will hold the FRI message
+       * @param maxSize Size in bytes of the allocated buffer
+       * @return Number of bytes received (0 when connection was terminated, negative in case of errors)
+       */
+      virtual int receive(char *buffer, int maxSize) = 0;
+   
+      /**
+       * \brief Send a new FRI command message to the KUKA Sunrise controller.
+       * 
+       * @param buffer Pointer to the buffer holding the FRI message
+       * @param size Size in bytes of the message to be send
+       * @return True if successful
+       */
+      virtual bool send(const char* buffer, int size) = 0;   
+   
+   };
+   
+}
+}
 
-#endif // _KUKA_FRI_LBR_WRENCH_SINE_OVERLAY_CLIENT_H
+
+#endif // _KUKA_FRI_CONNECTION_H

@@ -1,5 +1,3 @@
-/**
-
 The following license terms and conditions apply, unless a redistribution
 agreement or other license is obtained by KUKA Roboter GmbH, Augsburg, Germany.
 
@@ -51,69 +49,3 @@ commercial damages or losses.
 The entire risk to the quality and performance of the Software is not borne by
 KUKA. Should the Software prove defective, KUKA is not liable for the entire
 cost of any service and repair.
-
-
-
-\file
-\version {1.15}
-*/
-#ifndef _KUKA_FRI_LBR_TORQUE_SINE_OVERLAY_CLIENT_H
-#define _KUKA_FRI_LBR_TORQUE_SINE_OVERLAY_CLIENT_H
-
-#include <fri/friLBRClient.h>
-
-
-
-/**
- * \brief Test client that superposes joint torques with sine waves.
- */
-class LBRTorqueSineOverlayClient : public KUKA::FRI::LBRClient
-{
-   
-public:
-      
-   /**
-    * \brief Constructor.
-    * 
-    * @param jointMask Bit mask that encodes the joint indices to be overlaid by sine waves
-    * @param freqHz Sine frequency in Hertz
-    * @param torqueAmplitude Sine amplitude in Nm
-    */
-   LBRTorqueSineOverlayClient(unsigned int jointMask, double freqHz, 
-         double torqueAmplitude);
-   
-   /** 
-    * \brief Destructor.
-    */
-   ~LBRTorqueSineOverlayClient();
-   
-   /**
-    * \brief Callback for FRI state changes.
-    * 
-    * @param oldState
-    * @param newState
-    */
-   virtual void onStateChange(KUKA::FRI::ESessionState oldState, KUKA::FRI::ESessionState newState);
-   
-   /**
-    * \brief Callback for the FRI session state 'Commanding Wait'.
-    */
-   virtual void waitForCommand();
-   
-   /**
-    * \brief Callback for the FRI state 'Commanding Active'.
-    */
-   virtual void command();
-      
-private:
-      
-   int _jointMask;         //!< bit mask encoding of overlay joints
-   double _freqHz;         //!< sine frequency (Hertz)
-   double _torqueAmpl;     //!< sine amplitude (Nm)
-   double _phi;            //!< phase of sine wave
-   double _stepWidth;      //!< stepwidth for sine 
-   double _torques[KUKA::FRI::LBRState::NUMBER_OF_JOINTS]; //!< commanded superposed torques
-   
-};
-
-#endif // _KUKA_FRI_LBR_TORQUE_SINE_OVERLAY_CLIENT_H
