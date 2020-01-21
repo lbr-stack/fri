@@ -89,7 +89,9 @@ namespace FRI
          strncpy(_buffer, message, sizeof(_buffer) - 1);
          _buffer[sizeof(_buffer) - 1] = 0; // ensure string termination
          printf("FRIException: ");
-         printf(_buffer);
+         for(unsigned int i = 0; i < sizeof(_buffer); i++) {
+            printf("%c", _buffer[i]);
+         }
          printf("\n");
       }
       
@@ -108,7 +110,9 @@ namespace FRI
 #endif
             _buffer, sizeof(_buffer), message, param1);
          printf("FRIException: ");
-         printf(_buffer);
+         for(unsigned int i = 0; i < sizeof(_buffer); i++) {
+            printf("%c", _buffer[i]);
+         }
          printf("\n");
       }
       
@@ -128,7 +132,9 @@ namespace FRI
 #endif
             _buffer, sizeof(_buffer), message, param1, param2);
          printf("FRIException: ");
-         printf(_buffer);
+         for(unsigned int i = 0; i < sizeof(_buffer); i++) {
+            printf("%c", _buffer[i]);
+         }
          printf("\n");
       }
       
