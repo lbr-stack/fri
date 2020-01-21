@@ -3,7 +3,7 @@
 <package format="3">
   <name>nanopb</name>
   <version>1.0.0</version>
-  <description>Nanopb with ROS2 build system</description>
+  <description>NanoPB with ROS2 build system</description>
   <maintainer email="m.huber_1994@hotmail.de">mhubii</maintainer>
   <license>see LICENSE</license>
 
