@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.2)
 project(fri
-    LANGUAGES CXX
+    LANGUAGES C CXX
 )
 
 if(NOT CMAKE_CXX_STANDARD)
@@ -73,7 +73,7 @@ install(
 
 ament_export_include_directories(include)
 ament_export_libraries(fri)
-# export dependency?? nanopb
+ament_export_dependencies(nanopb)
 
 install(
     DIRECTORY include/
