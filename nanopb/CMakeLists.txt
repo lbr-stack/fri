@@ -23,20 +23,20 @@ target_include_directories(nanopb
 )
 
 # Export target
-ament_export_interfaces(export_nanopb HAS_LIBRARY_TARGET)
-
-install(
-    DIRECTORY include/
-    DESTINATION include
-)
-
 install(
     TARGETS nanopb
-    EXPORT export_nanopb
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     RUNTIME DESTINATION bin
     INCLUDES DESTINATION include
+)
+
+ament_export_include_directories(include)
+ament_export_libraries(nanopb)
+
+install(
+    DIRECTORY include/
+    DESTINATION include
 )
 
 ament_package()
