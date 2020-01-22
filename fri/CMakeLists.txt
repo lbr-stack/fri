@@ -64,7 +64,15 @@ target_include_directories(fri
 ament_target_dependencies(fri nanopb)
 
 # Export target
-ament_export_interfaces(export_fri HAS_LIBRARY_TARGET)
+install(
+    TARGETS fri
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    INCLUDES DESTINATION include
+)
+
+ament_export_include_directories(include)
+ament_export_libraries(fri)
 # export dependency?? nanopb
 
 install(
@@ -72,12 +80,6 @@ install(
     DESTINATION include
 )
 
-install(
-    TARGETS fri
-    EXPORT export_fri
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    INCLUDES DESTINATION include
-)
+
 
 ament_package()
