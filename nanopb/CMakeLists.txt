@@ -1,13 +1,11 @@
-cmake_minimum_required(VERSION 3.10.2)
-project(nanopb
-    LANGUAGES C
+cmake_minimum_required(VERSION 2.8.3)
+project(nanopb)
+
+find_package(catkin REQUIRED)
+
+catkin_package(
+  INCLUDE_DIRS include
 )
-
-if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14)
-endif()
-
-find_package(ament_cmake REQUIRED)
 
 # Define target
 add_library(nanopb
@@ -47,21 +45,14 @@ target_include_directories(nanopb
         $<INSTALL_INTERFACE:include>
 )
 
-# Export target
-install(
-    TARGETS nanopb
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    RUNTIME DESTINATION bin
-    INCLUDES DESTINATION include
+# Install
+install(TARGETS nanopb
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
 )
 
-ament_export_include_directories(include)
-ament_export_libraries(nanopb)
-
-install(
-    DIRECTORY include/
-    DESTINATION include
+install(DIRECTORY include/nanopb}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h"
 )
-
-ament_package()
