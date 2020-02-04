@@ -1,14 +1,12 @@
-cmake_minimum_required(VERSION 3.10.2)
-project(fri
-    LANGUAGES C CXX
-)
+cmake_minimum_required(VERSION 2.8.3)
+project(fri)
 
-if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14)
-endif()
-
-find_package(ament_cmake REQUIRED)
+find_package(catkin REQUIRED)
 find_package(nanopb REQUIRED)
+
+catkin_package(
+    INCLUDE_DIRS include
+)
 
 # Define target
 add_library(fri
@@ -61,23 +59,21 @@ target_include_directories(fri
 )
 
 # Link against dependencies
-ament_target_dependencies(fri nanopb)
-
-# Export target
-install(
-    TARGETS fri
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    INCLUDES DESTINATION include
+target_link_libraries(fri
+    PUBLIC
+        nanopb
 )
 
-ament_export_include_directories(include)
-ament_export_libraries(fri)
-ament_export_dependencies(nanopb)
+# Install
+install(
+    TARGETS fri
+    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+    RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
 
 install(
     DIRECTORY include/
-    DESTINATION include
+    DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
 
-ament_package()

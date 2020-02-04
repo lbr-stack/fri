@@ -1,17 +1,13 @@
 <?xml version="1.0"?>
-<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
-<package format="3">
+<package format="2">
   <name>fri</name>
   <version>1.0.0</version>
-  <description>KUKA fast robot interface with ROS2 build system</description>
+  <description>KUKA fast robot interface with ROS build system</description>
+
   <maintainer email="m.huber_1994@hotmail.de">mhubii</maintainer>
   <license>see LICENSE</license>
 
-  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>catkin</buildtool_depend>
 
   <depend>nanopb</depend>
-
-  <export>
-    <build_type>ament_cmake</build_type>
-  </export>
 </package>
