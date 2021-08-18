@@ -1,10 +1,11 @@
-cmake_minimum_required(VERSION 3.10.2)
+cmake_minimum_required(VERSION 3.16.3)
 project(nanopb
     LANGUAGES C
 )
 
-if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14)
+# Default to C99
+if(NOT CMAKE_C_STANDARD)
+  set(CMAKE_C_STANDARD 99)
 endif()
 
 find_package(ament_cmake REQUIRED)
@@ -47,21 +48,21 @@ target_include_directories(nanopb
         $<INSTALL_INTERFACE:include>
 )
 
-# Export target
-install(
-    TARGETS nanopb
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    RUNTIME DESTINATION bin
-    INCLUDES DESTINATION include
-)
-
-ament_export_include_directories(include)
-ament_export_libraries(nanopb)
+# Export for downstream usage, see https://docs.ros.org/en/foxy/Guides/Ament-CMake-Documentation.html
+ament_export_targets(export_nanopb HAS_LIBRARY_TARGET)
 
 install(
     DIRECTORY include/
     DESTINATION include
+)
+
+install(
+    TARGETS nanopb
+    EXPORT export_nanopb
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION include
 )
 
 ament_package()

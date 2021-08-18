@@ -4,7 +4,7 @@
   <name>nanopb</name>
   <version>1.0.0</version>
   <description>NanoPB with ROS2 build system</description>
-  <maintainer email="m.huber_1994@hotmail.de">mhubii</maintainer>
+  <maintainer email="martin.huber@kcl.ac.uk">mhubii</maintainer>
   <license>see LICENSE</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>

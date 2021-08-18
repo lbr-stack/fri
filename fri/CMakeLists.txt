@@ -1,8 +1,14 @@
-cmake_minimum_required(VERSION 3.10.2)
+cmake_minimum_required(VERSION 3.16.3)
 project(fri
     LANGUAGES C CXX
 )
 
+# Default to C99
+if(NOT CMAKE_C_STANDARD)
+  set(CMAKE_C_STANDARD 99)
+endif()
+
+# Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 14)
 endif()
@@ -63,21 +69,21 @@ target_include_directories(fri
 # Link against dependencies
 ament_target_dependencies(fri nanopb)
 
-# Export target
-install(
-    TARGETS fri
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    INCLUDES DESTINATION include
-)
-
-ament_export_include_directories(include)
-ament_export_libraries(fri)
+# Export for downstream usage, see https://docs.ros.org/en/foxy/Guides/Ament-CMake-Documentation.html
+ament_export_targets(export_fri HAS_LIBRARY_TARGET)
 ament_export_dependencies(nanopb)
 
 install(
     DIRECTORY include/
     DESTINATION include
+)
+
+install(
+    TARGETS fri
+    EXPORT export_fri
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    INCLUDES DESTINATION include
 )
 
 ament_package()
