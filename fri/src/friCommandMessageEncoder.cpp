@@ -58,7 +58,7 @@ cost of any service and repair.
 \version {1.15}
 */
 #include <cstdio>
-#include <friCommandMessageEncoder.h>
+#include <fri/friCommandMessageEncoder.h>
 #include <nanopb/pb_encode.h>
 
 using namespace KUKA::FRI;

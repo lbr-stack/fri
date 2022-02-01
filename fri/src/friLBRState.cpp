@@ -58,8 +58,8 @@ cost of any service and repair.
 \version {1.15}
 */
 #include <fri/friLBRState.h>
-#include <friClientData.h>
-#include <pb_frimessages_callbacks.h>
+#include <fri/friClientData.h>
+#include <fri/pb_frimessages_callbacks.h>
 
 using namespace KUKA::FRI;
 

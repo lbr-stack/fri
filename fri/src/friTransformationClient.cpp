@@ -62,10 +62,10 @@ cost of any service and repair.
 #include <cstdio>
 
 #include <fri/friTransformationClient.h>
-#include <friClientData.h>
+#include <fri/friClientData.h>
 
-#include <FRIMessages.pb.h>
-#include <pb_frimessages_callbacks.h>
+#include <fri/FRIMessages.pb.h>
+#include <fri/pb_frimessages_callbacks.h>
 
 using namespace KUKA::FRI;
 

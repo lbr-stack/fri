@@ -65,6 +65,10 @@ cost of any service and repair.
 // forward declarations
 typedef struct _FRIMonitoringMessage FRIMonitoringMessage;
 
+namespace LBR {
+   class FRIHardwareInterfaceNew;
+}
+
 /** Kuka namespace */
 namespace KUKA
 {
@@ -77,6 +81,7 @@ namespace FRI
    class LBRState
    {
       friend class LBRClient;
+      friend class LBR::FRIHardwareInterfaceNew;
       
    public:
 

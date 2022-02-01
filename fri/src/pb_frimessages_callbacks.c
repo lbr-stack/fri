@@ -61,7 +61,7 @@ cost of any service and repair.
 #include <stdio.h>
 #include <stdlib.h> 
 
-#include <pb_frimessages_callbacks.h>
+#include <fri/pb_frimessages_callbacks.h>
 #include <nanopb/pb_encode.h>
 #include <nanopb/pb_decode.h>
 

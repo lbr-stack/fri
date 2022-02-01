@@ -58,7 +58,7 @@ cost of any service and repair.
 \version {1.15}
 */
 #include <cstdio>
-#include <friMonitoringMessageDecoder.h>
+#include <fri/friMonitoringMessageDecoder.h>
 #include <nanopb/pb_decode.h>
 
 

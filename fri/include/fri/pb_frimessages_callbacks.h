@@ -57,77 +57,65 @@ cost of any service and repair.
 \file
 \version {1.15}
 */
-#ifndef _KUKA_FRI_MONITORINGMESSAGEDECODER_H
-#define _KUKA_FRI_MONITORINGMESSAGEDECODER_H
+#ifndef _pb_frimessages_callbacks_H
+#define _pb_frimessages_callbacks_H
 
-#include <FRIMessages.pb.h>
-#include <pb_frimessages_callbacks.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <nanopb/pb.h>
+#include <fri/FRIMessages.pb.h>
+
+/** container for repeated double elements */
+typedef struct repeatedDoubleArguments {
+   size_t size;
+   size_t max_size;
+   double* value;
+} tRepeatedDoubleArguments;
+
+/** container for repeated integer elements */
+typedef struct repeatedIntArguments {
+   size_t size;
+   size_t max_size;
+   int64_t* value;
+} tRepeatedIntArguments;
+
+/** enumeration for direction (encoding/decoding) */
+typedef enum DIRECTION {
+   FRI_MANAGER_NANOPB_DECODE = 0, //!< Argument um eine 
+   FRI_MANAGER_NANOPB_ENCODE = 1  //!< 
+} eNanopbCallbackDirection;
 
 
-namespace KUKA
-{
-namespace FRI
-{
+bool encode_repeatedDouble(pb_ostream_t *stream, const pb_field_t *field,
+      void * const *arg);
 
-   static const int FRI_MONITOR_MSG_MAX_SIZE = 1500;   //!< max size of a FRI monitoring message
-   
+bool decode_repeatedDouble(pb_istream_t *stream, const pb_field_t *field,
+      void **arg);
 
-   class MonitoringMessageDecoder
-   {
+bool encode_repeatedInt(pb_ostream_t *stream, const pb_field_t *field,
+      void * const *arg);
 
-   public:
+bool decode_repeatedInt(pb_istream_t *stream, const pb_field_t *field,
+      void **arg);
 
-      MonitoringMessageDecoder(FRIMonitoringMessage* pMessage, int num);
-    
-      ~MonitoringMessageDecoder();
-    
-      bool decode(char* buffer, int size);
-    
-    
-   private:
-    
-      struct LocalMonitoringDataContainer
-      {
-         tRepeatedDoubleArguments m_AxQMsrLocal;
-         tRepeatedDoubleArguments m_AxTauMsrLocal;
-         tRepeatedDoubleArguments m_AxQCmdT1mLocal;
-         tRepeatedDoubleArguments m_AxTauCmdLocal;
-         tRepeatedDoubleArguments m_AxTauExtMsrLocal;
-         tRepeatedIntArguments m_AxDriveStateLocal;        
-         tRepeatedDoubleArguments m_AxQCmdIPO;
-        
-         LocalMonitoringDataContainer()
-         {
-            init_repeatedDouble(&m_AxQMsrLocal);
-            init_repeatedDouble(&m_AxTauMsrLocal);
-            init_repeatedDouble(&m_AxQCmdT1mLocal);
-            init_repeatedDouble(&m_AxTauCmdLocal);
-            init_repeatedDouble(&m_AxTauExtMsrLocal);
-            init_repeatedDouble(&m_AxQCmdIPO);
-            init_repeatedInt(&m_AxDriveStateLocal);
-         }
-         
-         ~LocalMonitoringDataContainer()
-         {
-            free_repeatedDouble(&m_AxQMsrLocal);
-            free_repeatedDouble(&m_AxTauMsrLocal);
-            free_repeatedDouble(&m_AxQCmdT1mLocal);
-            free_repeatedDouble(&m_AxTauCmdLocal);
-            free_repeatedDouble(&m_AxTauExtMsrLocal);
-            free_repeatedDouble(&m_AxQCmdIPO);
-            free_repeatedInt(&m_AxDriveStateLocal);
-         }
-      };
+void map_repeatedDouble(eNanopbCallbackDirection dir, int numDOF,
+      pb_callback_t *values, tRepeatedDoubleArguments *arg);
 
-      int m_nNum;
+void map_repeatedInt(eNanopbCallbackDirection dir, int numDOF,
+      pb_callback_t *values, tRepeatedIntArguments *arg);
 
-      LocalMonitoringDataContainer m_tSendContainer;
-      FRIMonitoringMessage* m_pMessage;
-       
-      void initMessage();
-   };
+void init_repeatedDouble(tRepeatedDoubleArguments *arg);
 
-}
-}
-   
-#endif // _KUKA_FRI_MONITORINGMESSAGEDECODER_H
+void init_repeatedInt(tRepeatedIntArguments *arg);
+
+void free_repeatedDouble(tRepeatedDoubleArguments *arg);
+
+void free_repeatedInt(tRepeatedIntArguments *arg);
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
+
+#endif

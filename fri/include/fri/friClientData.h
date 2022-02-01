@@ -62,9 +62,9 @@ cost of any service and repair.
 
 #include <vector>
 
-#include <FRIMessages.pb.h>
-#include <friMonitoringMessageDecoder.h>
-#include <friCommandMessageEncoder.h>
+#include <fri/FRIMessages.pb.h>
+#include <fri/friMonitoringMessageDecoder.h>
+#include <fri/friCommandMessageEncoder.h>
 #include <fri/friClientIf.h>
 #include <fri/friException.h>
 
