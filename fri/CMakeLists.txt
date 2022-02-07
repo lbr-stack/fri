@@ -24,7 +24,6 @@ add_library(fri
     src/friLBRClient.cpp
     src/friLBRCommand.cpp
     src/friLBRState.cpp
-    src/friLBRState.cpp
     src/FRIMessages.pb.c
     src/friMonitoringMessageDecoder.cpp
     src/friTransformationClient.cpp
