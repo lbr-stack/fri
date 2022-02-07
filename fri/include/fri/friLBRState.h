@@ -66,7 +66,7 @@ cost of any service and repair.
 typedef struct _FRIMonitoringMessage FRIMonitoringMessage;
 
 namespace LBR {
-   class FRIHardwareInterfaceNew;
+   class FRIHardwareInterface;
 }
 
 /** Kuka namespace */
@@ -81,7 +81,7 @@ namespace FRI
    class LBRState
    {
       friend class LBRClient;
-      friend class LBR::FRIHardwareInterfaceNew;
+      friend class LBR::FRIHardwareInterface;
       
    public:
 
@@ -90,8 +90,18 @@ namespace FRI
           NUMBER_OF_JOINTS = 7      //!< number of axes of the KUKA LBR robot   
       };
 
+      /**
+       * @brief Default constructor for LBRState.
+       */
       LBRState();
       
+      /**
+       * @brief Construct the LBRState and have it share data with ClientData.
+       * 
+       * @param monMessage Monitoring message struct 
+       */
+      LBRState(FRIMonitoringMessage* const monMessage);
+
       /**
        * \brief Get the sample time in seconds. 
        * 

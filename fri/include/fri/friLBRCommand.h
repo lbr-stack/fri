@@ -65,7 +65,7 @@ cost of any service and repair.
 typedef struct _FRICommandMessage FRICommandMessage;
 
 namespace LBR {
-   class FRIHardwareInterfaceNew;
+   class FRIHardwareInterface;
 }
 
 /** Kuka namespace */
@@ -80,10 +80,23 @@ namespace FRI
    class LBRCommand
    {
       friend class LBRClient;
-      friend class LBR::FRIHardwareInterfaceNew;
+      friend class LBR::FRIHardwareInterface;
    
    public:
-            
+
+      /**
+       * @brief Default constructor for LBRCommand.
+       */
+      LBRCommand() = default;
+
+      /**
+       * @brief Construct the LBRCommand and have it share data with ClientData.
+       * 
+       * @param cmdMessage Command message struct
+       * @param monMessage Monitoring message struct
+       */
+      LBRCommand(FRICommandMessage* const cmdMessage, FRIMonitoringMessage* const monMessage);
+
       /**
        * \brief Set the joint positions for the current interpolation step.
        * 

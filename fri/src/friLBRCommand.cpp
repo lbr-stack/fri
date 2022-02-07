@@ -65,6 +65,10 @@ cost of any service and repair.
 using namespace KUKA::FRI;
 
 //******************************************************************************
+LBRCommand::LBRCommand(FRICommandMessage* const cmdMessage, FRIMonitoringMessage* const monMessage)
+   : _cmdMessage(cmdMessage), _monMessage(monMessage) {   }
+
+//******************************************************************************
 void LBRCommand::setJointPosition(const double* values)
 {
    _cmdMessage->has_commandData = true;

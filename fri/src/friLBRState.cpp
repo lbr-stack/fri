@@ -68,6 +68,11 @@ LBRState::LBRState():_message(0)
 {
     
 }
+
+//******************************************************************************
+LBRState::LBRState(FRIMonitoringMessage* const monMessage)
+   : _message(monMessage) {   };
+
 //******************************************************************************
 double LBRState::getSampleTime() const
 {
