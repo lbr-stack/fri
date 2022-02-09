@@ -71,7 +71,7 @@ install(
 )
 
 install(
-    DIRECTORY include/
+    DIRECTORY include
     DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
 
