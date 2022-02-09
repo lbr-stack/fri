@@ -54,6 +54,6 @@ install(
 )
 
 install(
-    DIRECTORY include/nanopb}/
+    DIRECTORY include/nanopb/
     DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
