@@ -5,6 +5,7 @@ find_package(catkin REQUIRED)
 
 catkin_package(
     INCLUDE_DIRS include
+    LIBRARIES nanopb
 )
 
 # Define target
@@ -50,7 +51,6 @@ install(
     TARGETS nanopb
     ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-    RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
 )
 
 install(

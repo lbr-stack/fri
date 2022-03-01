@@ -5,6 +5,8 @@ find_package(catkin REQUIRED COMPONENTS nanopb)
 
 catkin_package(
     INCLUDE_DIRS include
+    CATKIN_DEPENDS nanopb
+    LIBRARIES fri
 )
 
 # Define target
@@ -54,12 +56,13 @@ target_include_directories(fri
         $<INSTALL_INTERFACE:include>
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${catkin_INCLUDE_DIRS}
 )
 
 # Link against dependencies
 target_link_libraries(fri
     PUBLIC
-        nanopb
+        ${nanopb_LIBRARIES}
 )
 
 # Install
@@ -67,7 +70,6 @@ install(
     TARGETS fri
     ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-    RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
 )
 
 install(
