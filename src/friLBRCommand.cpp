@@ -14,7 +14,7 @@ code, libraries, binaries, manuals and technical documentation.
 COPYRIGHT
 
 All Rights Reserved
-Copyright (C)  2014-2019 
+Copyright (C)  2014-2017 
 KUKA Roboter GmbH
 Augsburg, Germany
 
@@ -55,7 +55,7 @@ cost of any service and repair.
 
 
 \file
-\version {1.15}
+\version {1.14}
 */
 #include <fri/friLBRState.h>
 #include <fri/friLBRCommand.h>
