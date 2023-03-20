@@ -14,7 +14,7 @@ code, libraries, binaries, manuals and technical documentation.
 COPYRIGHT
 
 All Rights Reserved
-Copyright (C)  2014-2019 
+Copyright (C)  2014-2017 
 KUKA Roboter GmbH
 Augsburg, Germany
 
@@ -54,7 +54,7 @@ cost of any service and repair.
 
 
 
-1.15
+1.14
 */
 #ifndef _KUKA_FRI_TRANSFORMATION_PROVIDER_CLIENT_H
 #define _KUKA_FRI_TRANSFORMATION_PROVIDER_CLIENT_H
