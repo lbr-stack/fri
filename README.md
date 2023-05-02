@@ -1,7 +1,7 @@
 # fri
 ![GitHub](https://img.shields.io/github/license/KCL-BMEIS/fri)
 
-This repository integrates KUKA's `fri` into the ROS 2 `ament_cmake` build ecosystem.
+This repository simply integrates KUKA's `FRI` into the ROS 2 `ament_cmake` build ecosystem.
 
 ## Acknowledgements
 <img src="https://www.kcl.ac.uk/newimages/Wellcome-EPSRC-Centre-medical-engineering-logo.xa827df3f.JPG?f=webp" alt="wellcome" height="45" width="65" align="left">
