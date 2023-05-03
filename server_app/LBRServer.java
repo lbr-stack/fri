@@ -1,3 +1,5 @@
+package fri;
+
 import static com.kuka.roboticsAPI.motionModel.BasicMotions.positionHold;
 
 import java.util.concurrent.TimeUnit;
