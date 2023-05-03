@@ -79,7 +79,7 @@ public class LBRServer extends RoboticsAPIApplication {
 				control_mode_ = new PositionControlMode();
 				break;
 			case JOINT_IMPEDANCE_CONTROL:
-				control_mode_ = new JointImpedanceControlMode(50, 50, 50, 50, 50, 50, 50);
+				control_mode_ = new JointImpedanceControlMode(200, 200, 200, 200, 200, 200, 200);
 				break;
 			case CARTESIAN_IMPEDANCE_CONTROL:
 				control_mode_ = new CartesianImpedanceControlMode();
