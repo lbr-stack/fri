@@ -1,5 +1,3 @@
-package fri;
-
 import static com.kuka.roboticsAPI.motionModel.BasicMotions.positionHold;
 
 import java.util.concurrent.TimeUnit;
@@ -9,7 +7,6 @@ import java.util.Arrays;
 import com.kuka.roboticsAPI.applicationModel.RoboticsAPIApplication;
 import com.kuka.roboticsAPI.controllerModel.Controller;
 import com.kuka.roboticsAPI.deviceModel.LBR;
-import com.kuka.roboticsAPI.geometricModel.CartDOF;
 import com.kuka.roboticsAPI.uiModel.ApplicationDialogType;
 import com.kuka.roboticsAPI.motionModel.controlModeModel.*;
 import com.kuka.connectivity.fastRobotInterface.*;
