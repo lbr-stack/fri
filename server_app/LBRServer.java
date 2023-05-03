@@ -1,4 +1,4 @@
-package fri;
+package lbr_fri_ros2;
 
 import static com.kuka.roboticsAPI.motionModel.BasicMotions.positionHold;
 
@@ -9,7 +9,6 @@ import java.util.Arrays;
 import com.kuka.roboticsAPI.applicationModel.RoboticsAPIApplication;
 import com.kuka.roboticsAPI.controllerModel.Controller;
 import com.kuka.roboticsAPI.deviceModel.LBR;
-import com.kuka.roboticsAPI.geometricModel.CartDOF;
 import com.kuka.roboticsAPI.uiModel.ApplicationDialogType;
 import com.kuka.roboticsAPI.motionModel.controlModeModel.*;
 import com.kuka.connectivity.fastRobotInterface.*;
@@ -80,7 +79,7 @@ public class LBRServer extends RoboticsAPIApplication {
 				control_mode_ = new PositionControlMode();
 				break;
 			case JOINT_IMPEDANCE_CONTROL:
-				control_mode_ = new JointImpedanceControlMode(50, 50, 50, 50, 50, 50, 50);
+				control_mode_ = new JointImpedanceControlMode(200, 200, 200, 200, 200, 200, 200);
 				break;
 			case CARTESIAN_IMPEDANCE_CONTROL:
 				control_mode_ = new CartesianImpedanceControlMode();
