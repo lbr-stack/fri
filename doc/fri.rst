@@ -33,7 +33,8 @@ Install Applications to the Robot
     - Click ``Finish``. Select ``RoboticsAPI Application``, and press ``Next``.
     - Click ``Finish``.
 
-4. lala
+4. Install applications
+    - 
 
 
 .. :ref:`LBR FRI ROS 2 Stack`
