@@ -30,8 +30,7 @@ Install Applications to the Robot
     - Give your project a name, e.g. FRI and click ``Next``.
     - Select your robot, e.g. LBR Med 7 R800 and click ``Next``.
     - Select your Media Flange and click ``Next``.
-    - Click ``Finish``. Select ``RoboticsAPI Application``, and press ``Next``.
-    - Click ``Finish``.
+    - Unselect ``Create Sunrise application (starts another wizard)`` and press ``Finish``
 
 4. lala
 
