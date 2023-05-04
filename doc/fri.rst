@@ -28,5 +28,5 @@ If you intend to use the FRI in your own ROS 2 project, you can do so through th
     find_package(fri REQUIRED)
 
 API
-~~~
+---
 For the ``Doxygen`` generated API, checkout `fri <../../docs/doxygen/fri/html/hierarchy.html>`_.
