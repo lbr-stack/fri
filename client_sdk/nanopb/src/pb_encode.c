@@ -3,8 +3,8 @@
  * 2011 Petteri Aimonen <jpa@kapsi.fi>
  */
 
-#include "pb.h"
-#include "pb_encode.h"
+#include "nanopb/pb.h"
+#include "nanopb/pb_encode.h"
 
 /* Use the GCC warn_unused_result attribute to check that all return values
  * are propagated correctly. On other compilers and gcc before 3.4.0 just
