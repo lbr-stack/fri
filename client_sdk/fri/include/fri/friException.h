@@ -60,6 +60,7 @@ cost of any service and repair.
 #ifndef _KUKA_FRI_EXCEPTION_H
 #define _KUKA_FRI_EXCEPTION_H
 
+#include <cstring>
 #include <stdio.h>
 
 /** Kuka namespace */
@@ -83,11 +84,7 @@ public:
   FRIException(const char *message) {
     strncpy(_buffer, message, sizeof(_buffer) - 1);
     _buffer[sizeof(_buffer) - 1] = 0; // ensure string termination
-    printf("FRIException: ");
-    for (unsigned int i = 0; i < sizeof(_buffer); i++) {
-      printf("%c", _buffer[i]);
-    }
-    printf("\n");
+    printf("FRIException:\n%s\n", _buffer);
   }
 
   /**
@@ -102,12 +99,8 @@ public:
 #else
     snprintf(
 #endif
-        _buffer, sizeof(_buffer), message, param1);
-    printf("FRIException: ");
-    for (unsigned int i = 0; i < sizeof(_buffer); i++) {
-      printf("%c", _buffer[i]);
-    }
-    printf("\n");
+      _buffer, sizeof(_buffer), message, param1);
+    printf("FRIException:\n%s\n", _buffer);
   }
 
   /**
@@ -124,11 +117,7 @@ public:
     snprintf(
 #endif
         _buffer, sizeof(_buffer), message, param1, param2);
-    printf("FRIException: ");
-    for (unsigned int i = 0; i < sizeof(_buffer); i++) {
-      printf("%c", _buffer[i]);
-    }
-    printf("\n");
+    printf("FRIException:\n%s\n", _buffer);
   }
 
   /**
