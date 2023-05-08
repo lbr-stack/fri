@@ -9,5 +9,5 @@
     - include cstring, maybe caused by import sort?
         #include <cstring>
         #include <stdio.h>
-- fix printf on string
-- check availability of friDataHelper.cpp in cmake add_library, doesnt exist!
+- fix printf on string -> printf("FRIException:\n%s\n", _buffer);
+- check availability of friDataHelper.cpp in cmake add_library, doesnt exist!#
