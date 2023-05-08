@@ -61,9 +61,10 @@ cost of any service and repair.
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "fri/pb_frimessages_callbacks.h"
 #include "nanopb/pb_decode.h"
 #include "nanopb/pb_encode.h"
+
+#include "pb_frimessages_callbacks.h"
 
 bool encode_repeatedDouble(pb_ostream_t *stream, const pb_field_t *field, void *const *arg) {
   size_t i = 0;

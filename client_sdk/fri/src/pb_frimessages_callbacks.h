@@ -64,8 +64,9 @@ cost of any service and repair.
 extern "C" {
 #endif
 
-#include "fri/FRIMessages.pb.h"
 #include "nanopb/pb.h"
+
+#include "FRIMessages.pb.h"
 
 /** container for repeated double elements */
 typedef struct repeatedDoubleArguments {

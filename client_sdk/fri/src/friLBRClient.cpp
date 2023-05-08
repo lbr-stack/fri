@@ -59,8 +59,9 @@ cost of any service and repair.
 */
 #include <cstdio>
 
-#include "fri/friClientData.h"
 #include "fri/friLBRClient.h"
+
+#include "friClientData.h"
 
 using namespace KUKA::FRI;
 char FRIException::_buffer[1024] = {0};

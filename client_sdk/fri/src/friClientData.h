@@ -62,11 +62,12 @@ cost of any service and repair.
 
 #include <vector>
 
-#include <fri/FRIMessages.pb.h>
-#include <fri/friClientIf.h>
-#include <fri/friCommandMessageEncoder.h>
-#include <fri/friException.h>
-#include <fri/friMonitoringMessageDecoder.h>
+#include "fri/friClientIf.h"
+#include "fri/friException.h"
+
+#include "FRIMessages.pb.h"
+#include "friCommandMessageEncoder.h"
+#include "friMonitoringMessageDecoder.h"
 
 namespace KUKA {
 namespace FRI {
