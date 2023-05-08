@@ -6,7 +6,7 @@
 #ifndef _PB_DECODE_H_
 #define _PB_DECODE_H_
 
-#include <nanopb/pb.h>
+#include "nanopb/pb.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -15,7 +15,7 @@ extern "C" {
 /* Structure for defining custom input streams. You will need to provide
  * a callback function to read the bytes from your storage, which can be
  * for example a file or a network socket.
- * 
+ *
  * The callback must conform to these rules:
  *
  * 1) Return false on IO errors. This will cause decoding to abort.
@@ -25,30 +25,29 @@ extern "C" {
  *    is different than from the main stream. Don't use bytes_left to compute
  *    any pointers.
  */
-struct _pb_istream_t
-{
+struct _pb_istream_t {
 #ifdef PB_BUFFER_ONLY
-    /* Callback pointer is not used in buffer-only configuration.
-     * Having an int pointer here allows binary compatibility but
-     * gives an error if someone tries to assign callback function.
-     */
-    int *callback;
+  /* Callback pointer is not used in buffer-only configuration.
+   * Having an int pointer here allows binary compatibility but
+   * gives an error if someone tries to assign callback function.
+   */
+  int *callback;
 #else
-    bool (*callback)(pb_istream_t *stream, uint8_t *buf, size_t count);
+  bool (*callback)(pb_istream_t *stream, uint8_t *buf, size_t count);
 #endif
 
-    void *state; /* Free field for use by callback implementation */
-    size_t bytes_left;
-    
+  void *state; /* Free field for use by callback implementation */
+  size_t bytes_left;
+
 #ifndef PB_NO_ERRMSG
-    const char *errmsg;
+  const char *errmsg;
 #endif
 };
 
 /***************************
  * Main decoding functions *
  ***************************/
- 
+
 /* Decode a single protocol buffers message from input stream into a C structure.
  * Returns true on success, false on any failure.
  * The actual struct pointed to by dest must match the description in fields.
@@ -59,7 +58,7 @@ struct _pb_istream_t
  *    MyMessage msg = {};
  *    uint8_t buffer[64];
  *    pb_istream_t stream;
- *    
+ *
  *    // ... read some data into buffer ...
  *
  *    stream = pb_istream_from_buffer(buffer, count);
@@ -93,7 +92,6 @@ bool pb_decode_delimited(pb_istream_t *stream, const pb_field_t fields[], void *
 void pb_release(const pb_field_t fields[], void *dest_struct);
 #endif
 
-
 /**************************************
  * Functions for manipulating streams *
  **************************************/
@@ -109,7 +107,6 @@ pb_istream_t pb_istream_from_buffer(uint8_t *buf, size_t bufsize);
  * read some custom header data, or to read data in field callbacks.
  */
 bool pb_read(pb_istream_t *stream, uint8_t *buf, size_t count);
-
 
 /************************************************
  * Helper functions for writing field callbacks *

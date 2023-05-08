@@ -18,7 +18,7 @@ find_package(nanopb REQUIRED)
 
 # Define target
 add_library(fri
-    SHARED # required for hardware interface
+    SHARED
     src/friClientApplication.cpp
     src/friCommandMessageEncoder.cpp
     src/friLBRClient.cpp

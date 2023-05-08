@@ -14,16 +14,16 @@ code, libraries, binaries, manuals and technical documentation.
 COPYRIGHT
 
 All Rights Reserved
-Copyright (C)  2014-2019 
+Copyright (C)  2014-2019
 KUKA Roboter GmbH
 Augsburg, Germany
 
-LICENSE 
+LICENSE
 
 Redistribution and use of the software in source and binary forms, with or
 without modification, are permitted provided that the following conditions are
 met:
-a) The software is used in conjunction with KUKA products only. 
+a) The software is used in conjunction with KUKA products only.
 b) Redistributions of source code must retain the above copyright notice, this
 list of conditions and the disclaimer.
 c) Redistributions in binary form must reproduce the above copyright notice,
@@ -40,14 +40,14 @@ DISCLAIMER OF WARRANTY
 
 The Software is provided "AS IS" and "WITH ALL FAULTS," without warranty of
 any kind, including without limitation the warranties of merchantability,
-fitness for a particular purpose and non-infringement. 
+fitness for a particular purpose and non-infringement.
 KUKA makes no warranty that the Software is free of defects or is suitable for
 any particular purpose. In no event shall KUKA be responsible for loss or
 damages arising from the installation or use of the Software, including but
 not limited to any indirect, punitive, special, incidental or consequential
 damages of any character including, without limitation, damages for loss of
 goodwill, work stoppage, computer failure or malfunction, or any and all other
-commercial damages or losses. 
+commercial damages or losses.
 The entire risk to the quality and performance of the Software is not borne by
 KUKA. Should the Software prove defective, KUKA is not liable for the entire
 cost of any service and repair.
@@ -57,77 +57,61 @@ cost of any service and repair.
 \file
 \version {1.15}
 */
-#ifndef _KUKA_FRI_MONITORINGMESSAGEDECODER_H
-#define _KUKA_FRI_MONITORINGMESSAGEDECODER_H
+#ifndef _pb_frimessages_callbacks_H
+#define _pb_frimessages_callbacks_H
 
-#include <fri/FRIMessages.pb.h>
-#include <fri/pb_frimessages_callbacks.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+#include "nanopb/pb.h"
 
-namespace KUKA
-{
-namespace FRI
-{
+#include "FRIMessages.pb.h"
 
-   static const int FRI_MONITOR_MSG_MAX_SIZE = 1500;   //!< max size of a FRI monitoring message
-   
+/** container for repeated double elements */
+typedef struct repeatedDoubleArguments {
+  size_t size;
+  size_t max_size;
+  double *value;
+} tRepeatedDoubleArguments;
 
-   class MonitoringMessageDecoder
-   {
+/** container for repeated integer elements */
+typedef struct repeatedIntArguments {
+  size_t size;
+  size_t max_size;
+  int64_t *value;
+} tRepeatedIntArguments;
 
-   public:
+/** enumeration for direction (encoding/decoding) */
+typedef enum DIRECTION {
+  FRI_MANAGER_NANOPB_DECODE = 0, //!< Argument um eine
+  FRI_MANAGER_NANOPB_ENCODE = 1  //!<
+} eNanopbCallbackDirection;
 
-      MonitoringMessageDecoder(FRIMonitoringMessage* pMessage, int num);
-    
-      ~MonitoringMessageDecoder();
-    
-      bool decode(char* buffer, int size);
-    
-    
-   private:
-    
-      struct LocalMonitoringDataContainer
-      {
-         tRepeatedDoubleArguments m_AxQMsrLocal;
-         tRepeatedDoubleArguments m_AxTauMsrLocal;
-         tRepeatedDoubleArguments m_AxQCmdT1mLocal;
-         tRepeatedDoubleArguments m_AxTauCmdLocal;
-         tRepeatedDoubleArguments m_AxTauExtMsrLocal;
-         tRepeatedIntArguments m_AxDriveStateLocal;        
-         tRepeatedDoubleArguments m_AxQCmdIPO;
-        
-         LocalMonitoringDataContainer()
-         {
-            init_repeatedDouble(&m_AxQMsrLocal);
-            init_repeatedDouble(&m_AxTauMsrLocal);
-            init_repeatedDouble(&m_AxQCmdT1mLocal);
-            init_repeatedDouble(&m_AxTauCmdLocal);
-            init_repeatedDouble(&m_AxTauExtMsrLocal);
-            init_repeatedDouble(&m_AxQCmdIPO);
-            init_repeatedInt(&m_AxDriveStateLocal);
-         }
-         
-         ~LocalMonitoringDataContainer()
-         {
-            free_repeatedDouble(&m_AxQMsrLocal);
-            free_repeatedDouble(&m_AxTauMsrLocal);
-            free_repeatedDouble(&m_AxQCmdT1mLocal);
-            free_repeatedDouble(&m_AxTauCmdLocal);
-            free_repeatedDouble(&m_AxTauExtMsrLocal);
-            free_repeatedDouble(&m_AxQCmdIPO);
-            free_repeatedInt(&m_AxDriveStateLocal);
-         }
-      };
+bool encode_repeatedDouble(pb_ostream_t *stream, const pb_field_t *field, void *const *arg);
 
-      int m_nNum;
+bool decode_repeatedDouble(pb_istream_t *stream, const pb_field_t *field, void **arg);
 
-      LocalMonitoringDataContainer m_tSendContainer;
-      FRIMonitoringMessage* m_pMessage;
-       
-      void initMessage();
-   };
+bool encode_repeatedInt(pb_ostream_t *stream, const pb_field_t *field, void *const *arg);
 
-}
-}
-   
-#endif // _KUKA_FRI_MONITORINGMESSAGEDECODER_H
+bool decode_repeatedInt(pb_istream_t *stream, const pb_field_t *field, void **arg);
+
+void map_repeatedDouble(eNanopbCallbackDirection dir, int numDOF, pb_callback_t *values,
+                        tRepeatedDoubleArguments *arg);
+
+void map_repeatedInt(eNanopbCallbackDirection dir, int numDOF, pb_callback_t *values,
+                     tRepeatedIntArguments *arg);
+
+void init_repeatedDouble(tRepeatedDoubleArguments *arg);
+
+void init_repeatedInt(tRepeatedIntArguments *arg);
+
+void free_repeatedDouble(tRepeatedDoubleArguments *arg);
+
+void free_repeatedInt(tRepeatedIntArguments *arg);
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
+
+#endif
