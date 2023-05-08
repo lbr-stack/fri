@@ -6,7 +6,7 @@
 #ifndef _PB_ENCODE_H_
 #define _PB_ENCODE_H_
 
-#include "pb.h"
+#include "nanopb/pb.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,25 +24,24 @@ extern "C" {
  * 4) Substreams will modify max_size and bytes_written. Don't use them
  *    to calculate any pointers.
  */
-struct _pb_ostream_t
-{
+struct _pb_ostream_t {
 #ifdef PB_BUFFER_ONLY
-    /* Callback pointer is not used in buffer-only configuration.
-     * Having an int pointer here allows binary compatibility but
-     * gives an error if someone tries to assign callback function.
-     * Also, NULL pointer marks a 'sizing stream' that does not
-     * write anything.
-     */
-    int *callback;
+  /* Callback pointer is not used in buffer-only configuration.
+   * Having an int pointer here allows binary compatibility but
+   * gives an error if someone tries to assign callback function.
+   * Also, NULL pointer marks a 'sizing stream' that does not
+   * write anything.
+   */
+  int *callback;
 #else
-    bool (*callback)(pb_ostream_t *stream, const uint8_t *buf, size_t count);
+  bool (*callback)(pb_ostream_t *stream, const uint8_t *buf, size_t count);
 #endif
-    void *state;          /* Free field for use by callback implementation. */
-    size_t max_size;      /* Limit number of output bytes written (or use SIZE_MAX). */
-    size_t bytes_written; /* Number of bytes written so far. */
-    
+  void *state;          /* Free field for use by callback implementation. */
+  size_t max_size;      /* Limit number of output bytes written (or use SIZE_MAX). */
+  size_t bytes_written; /* Number of bytes written so far. */
+
 #ifndef PB_NO_ERRMSG
-    const char *errmsg;
+  const char *errmsg;
 #endif
 };
 
@@ -90,7 +89,7 @@ pb_ostream_t pb_ostream_from_buffer(uint8_t *buf, size_t bufsize);
 
 /* Pseudo-stream for measuring the size of a message without actually storing
  * the encoded data.
- * 
+ *
  * Example usage:
  *    MyMessage msg = {};
  *    pb_ostream_t stream = PB_OSTREAM_SIZING;
@@ -98,16 +97,17 @@ pb_ostream_t pb_ostream_from_buffer(uint8_t *buf, size_t bufsize);
  *    printf("Message size is %d\n", stream.bytes_written);
  */
 #ifndef PB_NO_ERRMSG
-#define PB_OSTREAM_SIZING {0,0,0,0,0}
+#define PB_OSTREAM_SIZING                                                                          \
+  { 0, 0, 0, 0, 0 }
 #else
-#define PB_OSTREAM_SIZING {0,0,0,0}
+#define PB_OSTREAM_SIZING                                                                          \
+  { 0, 0, 0, 0 }
 #endif
 
 /* Function to write into a pb_ostream_t stream. You can use this if you need
  * to append or prepend some custom headers to the message.
  */
 bool pb_write(pb_ostream_t *stream, const uint8_t *buf, size_t count);
-
 
 /************************************************
  * Helper functions for writing field callbacks *
