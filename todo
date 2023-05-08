@@ -6,5 +6,8 @@
 - add white space between system includes and fri
 - add src includes after others
 - fix strncpy include? in friException.h
+    - include cstring, maybe caused by import sort?
+        #include <cstring>
+        #include <stdio.h>
 - fix printf on string
 - check availability of friDataHelper.cpp in cmake add_library, doesnt exist!

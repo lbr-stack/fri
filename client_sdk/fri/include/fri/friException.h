@@ -60,7 +60,8 @@ cost of any service and repair.
 #ifndef _KUKA_FRI_EXCEPTION_H
 #define _KUKA_FRI_EXCEPTION_H
 
-#include "stdio.h"
+#include <cstring>
+#include <stdio.h>
 
 /** Kuka namespace */
 namespace KUKA
