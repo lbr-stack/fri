@@ -89,9 +89,7 @@ namespace FRI
       { 
          strncpy(_buffer, message, sizeof(_buffer) - 1);
          _buffer[sizeof(_buffer) - 1] = 0; // ensure string termination
-         printf("FRIException: ");
-         printf(_buffer);
-         printf("\n");
+         printf("FRIException:\n%s\n", _buffer);
       }
       
       /**
@@ -108,9 +106,7 @@ namespace FRI
          snprintf(
 #endif
             _buffer, sizeof(_buffer), message, param1);
-         printf("FRIException: ");
-         printf(_buffer);
-         printf("\n");
+         printf("FRIException:\n%s\n", _buffer);
       }
       
       /**
@@ -128,9 +124,7 @@ namespace FRI
          snprintf(
 #endif
             _buffer, sizeof(_buffer), message, param1, param2);
-         printf("FRIException: ");
-         printf(_buffer);
-         printf("\n");
+         printf("FRIException:\n%s\n", _buffer);
       }
       
       /**
