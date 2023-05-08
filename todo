@@ -1,0 +1,10 @@
+- add cmower to maintainer
+- fix nanopb cmake??
+- replace include <> by ""
+- remove shared hw if hint from cmake in fri
+- fix � -> "
+- add white space between system includes and fri
+- add src includes after others
+- fix strncpy include? in friException.h
+- fix printf on string
+- check availability of friDataHelper.cpp in cmake add_library, doesnt exist!
