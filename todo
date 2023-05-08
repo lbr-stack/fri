@@ -11,3 +11,4 @@
         #include <stdio.h>
 - fix printf on string -> printf("FRIException:\n%s\n", _buffer);
 - check availability of friDataHelper.cpp in cmake add_library, doesnt exist!#
+- add typedef struct _FRIMonitoringMessage FRIMonitoringMessage; forward decl in lbrCommand.h
