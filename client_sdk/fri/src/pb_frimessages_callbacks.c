@@ -1,6 +1,6 @@
 /**
 
- The following license terms and conditions apply, unless a redistribution
+The following license terms and conditions apply, unless a redistribution
 agreement or other license is obtained by KUKA Roboter GmbH, Augsburg, Germany.
 
 SCOPE
