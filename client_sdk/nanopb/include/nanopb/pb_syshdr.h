@@ -6,7 +6,7 @@
  * It is very likely that you will need to customize this file to suit
  * your platform. For any compiler that supports C99, this file should
  * not be necessary.
- * 
+ *
  * KUKA: Added VXWORKS support
  */
 
@@ -15,15 +15,15 @@
 
 /* KUKA VxWorks 6.8 support */
 #ifdef VXWORKS
-   #define HAVE_STRING_H
-   #define HAVE_STDLIB_H
+#define HAVE_STRING_H
+#define HAVE_STDLIB_H
 #ifdef _WRS_KERNEL
-   #include <types/vxTypes.h> // int32_t, int64_t, ...
-   #define HAVE_STDINT_H_ALTERNATIVE
-   #define HAVE_STDDEF_H_ALTERNATIVE
+#include <types/vxTypes.h> // int32_t, int64_t, ...
+#define HAVE_STDINT_H_ALTERNATIVE
+#define HAVE_STDDEF_H_ALTERNATIVE
 #else
-   #define HAVE_STDINT_H
-   #define HAVE_STDDEF_H
+#define HAVE_STDINT_H
+#define HAVE_STDDEF_H
 #endif // _WRS_KERNEL
 #endif // VXWORKS
 
@@ -31,8 +31,6 @@
 #if !defined(HAVE_STDDEF_H) && !defined(HAVE_STDLIB_H) && !defined(HAVE_STRING_H)
 typedef uint32_t size_t;
 #endif
-
-
 
 /* stdint.h subset */
 #ifdef HAVE_STDINT_H
@@ -73,7 +71,7 @@ typedef int bool;
 #define false 0
 #define true 1
 #endif
-   
+
 #endif // HAVE_STDBOOL_H
 
 /* stdlib.h subset */
@@ -92,35 +90,29 @@ void free(void *ptr);
 #else
 
 /* Implementations are from the Public Domain C Library (PDCLib). */
-static size_t strlen( const char * s )
-{
-    size_t rc = 0;
-    while ( s[rc] )
-    {
-        ++rc;
-    }
-    return rc;
+static size_t strlen(const char *s) {
+  size_t rc = 0;
+  while (s[rc]) {
+    ++rc;
+  }
+  return rc;
 }
 
-static void * memcpy( void *s1, const void *s2, size_t n )
-{
-    char * dest = (char *) s1;
-    const char * src = (const char *) s2;
-    while ( n-- )
-    {
-        *dest++ = *src++;
-    }
-    return s1;
+static void *memcpy(void *s1, const void *s2, size_t n) {
+  char *dest = (char *)s1;
+  const char *src = (const char *)s2;
+  while (n--) {
+    *dest++ = *src++;
+  }
+  return s1;
 }
 
-static void * memset( void * s, int c, size_t n )
-{
-    unsigned char * p = (unsigned char *) s;
-    while ( n-- )
-    {
-        *p++ = (unsigned char) c;
-    }
-    return s;
+static void *memset(void *s, int c, size_t n) {
+  unsigned char *p = (unsigned char *)s;
+  while (n--) {
+    *p++ = (unsigned char)c;
+  }
+  return s;
 }
 #endif // HAVE_STRING_H
 

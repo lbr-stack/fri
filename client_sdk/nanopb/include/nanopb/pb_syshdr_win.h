@@ -1,11 +1,11 @@
-/* This is a headerfile customized for Microsoft Visual Studio 2010 
+/* This is a headerfile customized for Microsoft Visual Studio 2010
  * - based on example of a header file for platforms/compilers that do
  * not come with stdint.h/stddef.h/stdbool.h/string.h. To use it, define
  * PB_SYSTEM_HEADER as "pb_syshdr_win.h", including the quotes, and add the
  * extra folder to your include path.
  *
- *  Authorship: This file was altered/created by KUKA Roboter GmbH, Augsburg, Germany in 2014 
- *  
+ *  Authorship: This file was altered/created by KUKA Roboter GmbH, Augsburg, Germany in 2014
+ *
  */
 
 #ifndef _PB_SYSHDR_WIN_H_
@@ -26,12 +26,12 @@ typedef signed long long int64_t;
 typedef unsigned long long uint64_t;
 
 // from stdint.h
-#define INT8_MAX	0x7f
-#define INT16_MAX	0x7fff
-#define INT32_MAX	0x7fffffff
-#define UINT8_MAX	0xffU
-#define UINT16_MAX	0xffffU
-#define UINT32_MAX	0xffffffffU
+#define INT8_MAX 0x7f
+#define INT16_MAX 0x7fff
+#define INT32_MAX 0x7fffffff
+#define UINT8_MAX 0xffU
+#define UINT16_MAX 0xffffU
+#define UINT32_MAX 0xffffffffU
 #endif
 
 /* stddef.h subset */
@@ -39,7 +39,7 @@ typedef unsigned long long uint64_t;
 #include <stddef.h>
 #else
 
-//typedef uint32_t size_t;  // wird dieser typedef wirklich benötigt?!?
+// typedef uint32_t size_t;  // wird dieser typedef wirklich benï¿½tigt?!?
 #ifndef offsetof
 #define offsetof(st, m) ((size_t)(&((st *)0)->m))
 #endif
@@ -80,35 +80,29 @@ void free(void *ptr);
 
 #ifndef WIN32
 /* Implementations are from the Public Domain C Library (PDCLib). */
-static size_t strlen( const char * s )
-{
-    size_t rc = 0;
-    while ( s[rc] )
-    {
-        ++rc;
-    }
-    return rc;
+static size_t strlen(const char *s) {
+  size_t rc = 0;
+  while (s[rc]) {
+    ++rc;
+  }
+  return rc;
 }
 
-static void * memcpy( void *s1, const void *s2, size_t n )
-{
-    char * dest = (char *) s1;
-    const char * src = (const char *) s2;
-    while ( n-- )
-    {
-        *dest++ = *src++;
-    }
-    return s1;
+static void *memcpy(void *s1, const void *s2, size_t n) {
+  char *dest = (char *)s1;
+  const char *src = (const char *)s2;
+  while (n--) {
+    *dest++ = *src++;
+  }
+  return s1;
 }
 
-static void * memset( void * s, int c, size_t n )
-{
-    unsigned char * p = (unsigned char *) s;
-    while ( n-- )
-    {
-        *p++ = (unsigned char) c;
-    }
-    return s;
+static void *memset(void *s, int c, size_t n) {
+  unsigned char *p = (unsigned char *)s;
+  while (n--) {
+    *p++ = (unsigned char)c;
+  }
+  return s;
 }
 #else
 #include <string.h>
