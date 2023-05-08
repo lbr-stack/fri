@@ -64,6 +64,7 @@ cost of any service and repair.
 
 // forward declarations
 typedef struct _FRICommandMessage FRICommandMessage;
+typedef struct _FRIMonitoringMessage FRIMonitoringMessage;
 
 /** Kuka namespace */
 namespace KUKA {
