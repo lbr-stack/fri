@@ -5,10 +5,10 @@ agreement or other license is obtained by KUKA Deutschland GmbH, Augsburg, Germa
 
 SCOPE
 
-The software “KUKA Sunrise.FRI Client SDK” is targeted to work in
-conjunction with the “KUKA Sunrise.FRI” toolkit.
-In the following, the term “software” refers to all material directly
-belonging to the provided SDK “Software development kit”, particularly source
+The software "KUKA Sunrise.FRI Client SDK" is targeted to work in
+conjunction with the "KUKA Sunrise.FRI" toolkit.
+In the following, the term "software" refers to all material directly
+belonging to the provided SDK "Software development kit", particularly source
 code, libraries, binaries, manuals and technical documentation.
 
 COPYRIGHT
@@ -61,9 +61,10 @@ cost of any service and repair.
 #include <cstring>
 #include <cstdio>
 
-#include "friTransformationClient.h"
+#include "fri/friTransformationClient.h"
+#include "fri/friDataHelper.h"
+
 #include "friClientData.h"
-#include "friDataHelper.h"
 #include "FRIMessages.pb.h"
 #include "pb_frimessages_callbacks.h"
 

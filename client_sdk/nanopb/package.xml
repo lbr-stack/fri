@@ -5,6 +5,7 @@
   <version>1.0.0</version>
   <description>NanoPB with ROS 2 build system.</description>
   <maintainer email="martin.huber@kcl.ac.uk">mhubii</maintainer>
+  <maintainer email="christopher.mower@kcl.ac.uk">cmower</maintainer>
   <license>see LICENSE</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
