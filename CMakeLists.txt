@@ -1,7 +1,7 @@
 ### CMake support for KUKA's Fast Robot Interface library
 cmake_minimum_required(VERSION 3.18)
 
-project(FRI VERSION 2.0.0
+project(FRI VERSION 1.0.0
         DESCRIPTION "KUKA's Fast Robot Interface."
         LANGUAGES C CXX)
 
@@ -18,7 +18,7 @@ file(ARCHIVE_EXTRACT
 )
 
 # add nanopb target
-message(STATUS "Building nanopb version ${NANOPB_VERSION}")
+message(STATUS "Configuring nanopb version ${NANOPB_VERSION}")
 
 set(NANOPB_SOURCES
     ${FRI_CLIENT_SDK_NAME}/src/nanopb-${NANOPB_VERSION}/pb_decode.c
@@ -36,7 +36,7 @@ target_include_directories(nanopb
 )
 
 # add fri target
-message(STATUS "Building FRI version ${FRI_VERSION}")
+message(STATUS "Configuring FRI version ${FRI_VERSION}")
 
 file(GLOB_RECURSE FRI_SOURCES RELATIVE ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/base/*.cpp
