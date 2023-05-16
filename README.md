@@ -22,14 +22,23 @@ On the `smartPAD`, run the `LBRJointSineOverlay` application. You should see the
 
 ## Contributing
 Do you use a different FRI version?
-- Fork this repository.
-- Create a branch fri-major.minor (e.g. fri-1.15).
-- Replace `FRI-Client-SDK_Cpp_v1.15.zip` with your client SDK as extracted from `KUKA Sunrise Workbench`.
-- Update `README.md`.
-- Open a pull request.
+
+1. Fork this repository.
+2. Create a branch fri-major.minor (e.g. fri-1.15).
+3. Replace `FRI-Client-SDK_Cpp.zip` with your client SDK as extracted from `KUKA Sunrise Workbench`. Therefore (see images):
+    * In the `Software` tab of `StationSetup.cat`, add `Fast Robot Interface Extension`.
+    * Save via `ctrl+s`, click `Save and apply`.
+    * Under `FastRobotInterface_Client_Source`, find `FRI-Client-SDK_Cpp.zip`.
+
+  <figure>
+    <p align="center"><img src="img/00_extract_fri_client_sdk.png" width="25%" height="25%" hspace="20"><img   src="img/01_extract_fri_client_sdk.png" width="25%" height="25%" hspace="20"><img src="img/02_extract_fri_client_sdk.png" width="25%" height="25%" hspace="20"></p>
+    <figcaption></figcaption>
+  </figure>
+
+4. Open a pull request.
 
 ## License
-Please note that we distribute the CMake support under MIT license. Please note that third party libraries under `FRI-Client-SDK_Cpp_v1.15.zip` are distributed under their respective license.
+Please note that we distribute the CMake support under MIT license. Please note that third party libraries under `FRI-Client-SDK_Cpp.zip` are distributed under their respective license.
 
 ## Acknowledgements
 <img src="https://www.kcl.ac.uk/newimages/Wellcome-EPSRC-Centre-medical-engineering-logo.xa827df3f.JPG?f=webp" alt="wellcome" height="45" width="65" align="left">
