@@ -15,8 +15,16 @@ jobs:
     runs-on: ${{matrix.os}}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-      - name: Configure CMake
-        run: cmake -B ${{github.workspace}}/build --config Release
-      - name: Build
+        uses: actions/checkout@v3      
+      - name: Configure CMake Ubuntu
+        if: matrix.os == 'ubuntu-latest'
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release
+      - name: Build Ubuntu
+        if: matrix.os == 'ubuntu-latest'
         run: cmake --build ${{github.workspace}}/build
+      - name: Configure CMake Windows
+        if: matrix.os == 'ubuntu-latest'
+        run: cmake -B ${{github.workspace}}/build
+      - name: Build Windows
+        if: matrix.os == 'ubuntu-latest'
+        run: cmake --build ${{github.workspace}}/build --config Release
