@@ -1,39 +1,59 @@
-cmake_minimum_required(VERSION 3.1...3.15)
-
 ### CMake support for KUKA's Fast Robot Interface library
-if(${CMAKE_VERSION} VERSION_LESS 3.12)
-    cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
-endif()
+cmake_minimum_required(VERSION 3.18)
 
-project(FastRobotInterface VERSION 1.0.0
+project(FRI VERSION 1.0.0
         DESCRIPTION "KUKA's Fast Robot Interface."
         LANGUAGES C CXX)
 
-### Append CMAKE_MODULE_PATH by custom find file
-list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_SOURCE_DIR}/cmake)
+set(FRI_CLIENT_SDK_NAME FRI-Client-SDK_Cpp)
+set(NANOPB_VERSION 0.2.8)
 
-### Third party dependency
-add_subdirectory(third_party/nanopb)
+option(BUILD_FRI_APPS "Build FRI example applications" OFF)
 
-### Add the Fast Robot Interface libray
-add_library(fri
-    src/friClientApplication.cpp
-    src/friCommandMessageEncoder.cpp
-    src/friLBRClient.cpp
-    src/friLBRCommand.cpp
-    src/friLBRState.cpp
-    src/FRIMessages.pb.c
-    src/friMonitoringMessageDecoder.cpp
-    src/friTransformationClient.cpp
-    src/friUdpConnection.cpp
-    src/pb_frimessages_callbacks.c
+file(ARCHIVE_EXTRACT
+    INPUT ${CMAKE_CURRENT_SOURCE_DIR}/${FRI_CLIENT_SDK_NAME}.zip
+    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}
 )
 
-### Add compile options, similar to https://stackoverflow.com/questions/45955272/modern-way-to-set-compiler-flags-in-cross-platform-cmake-project
+# add nanopb target
+message(STATUS "Configuring nanopb version ${NANOPB_VERSION}")
+
+set(NANOPB_SOURCES
+    ${FRI_CLIENT_SDK_NAME}/src/nanopb-${NANOPB_VERSION}/pb_decode.c
+    ${FRI_CLIENT_SDK_NAME}/src/nanopb-${NANOPB_VERSION}/pb_encode.c
+)
+
+add_library(nanopb SHARED
+    ${NANOPB_SOURCES}
+)
+
+target_include_directories(nanopb
+    PUBLIC
+        $<INSTALL_INTERFACE:include/nanopb-${NANOPB_VERSION}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/nanopb-${NANOPB_VERSION}>
+)
+
+# add fri target
+message(STATUS "Configuring FRI version ${FRI_VERSION}")
+
+file(GLOB_RECURSE FRI_SOURCES RELATIVE ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/base/*.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/client_lbr/*.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/client_trafo/*.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/connection/*.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/protobuf/*.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/protobuf/*.c
+    ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/protobuf_gen/*.pb.c
+)
+
+add_library(fri SHARED
+    ${FRI_SOURCES}
+)
+
 if(MSVC)
     target_compile_options(fri
         PRIVATE
-            -DPB_SYSTEM_HEADER=<nanopb/pb_syshdr_win.h>
+            -DPB_SYSTEM_HEADER="pb_syshdr_win.h"
             -DPB_FIELD_16BIT
             -DWIN32
             -DHAVE_STDINT_H
@@ -42,75 +62,59 @@ if(MSVC)
 else()
     target_compile_options(fri
         PRIVATE
-            -O2
-            -Wall
+            -Ofast
             -DHAVE_SOCKLEN_T
-            -DPB_SYSTEM_HEADER=<nanopb/pb_syshdr.h>
+            -DPB_SYSTEM_HEADER="pb_syshdr.h"
             -DPB_FIELD_16BIT
             -DHAVE_STDINT_H
             -DHAVE_STDDEF_H
             -DHAVE_STDBOOL_H
             -DHAVE_STDLIB_H
-            -DHAVE_STRING_H 
+            -DHAVE_STRING_H
     ) 
 endif()
 
 target_include_directories(fri
     PUBLIC
         $<INSTALL_INTERFACE:include>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/include>
     PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/base
+        ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/protobuf
+        ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/protobuf_gen
 )
 
 target_link_libraries(fri
     PRIVATE
-        NanoPB::nanopb # ALIAS library https://cmake.org/cmake/help/v3.10/command/add_library.html#alias-libraries
+        nanopb
 )
 
-### Install instructions
-include(GNUInstallDirs)
-set(INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/fri)
+# build examples
+if (BUILD_FRI_APPS)
+    function(build_fri_example NAME)
+        file(GLOB_RECURSE ${NAME}_SOURCES RELATIVE ${CMAKE_CURRENT_BINARY_DIR}
+            ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/example/${NAME}/*.cpp
+        )
 
-install(TARGETS fri
-    EXPORT fri-targets
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
+        add_executable(${NAME}App
+            ${${NAME}_SOURCES}
+        )
 
-### Set exported target's name to FRI
-set_target_properties(fri PROPERTIES EXPORT_NAME FRI)
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+        target_include_directories(${NAME}App
+            PRIVATE
+                ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/example/${NAME}
+        )
 
-### Export target to a script
-install(EXPORT fri-targets
-    FILE FRITargets.cmake
-    NAMESPACE FRI::
-    DESTINATION ${INSTALL_CONFIGDIR}
-)
+        target_link_libraries(${NAME}App
+            PRIVATE
+                fri
+        )
+    endfunction()
 
-### Create a ConfigVersion.cmake file
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-    ${CMAKE_CURRENT_BINARY_DIR}/FRIConfigVersion.cmake
-    VERSION ${PROJECT_VERSION}
-    COMPATIBILITY AnyNewerVersion
-)
-
-configure_package_config_file(${CMAKE_CURRENT_LIST_DIR}/cmake/FRIConfig.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/FRIConfig.cmake
-    INSTALL_DESTINATION ${INSTALL_CONFIGDIR}
-)
-
-### Install the config, configversion and custom find modules
-install(FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/FRIConfig.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/FRIConfigVersion.cmake
-    DESTINATION ${INSTALL_CONFIGDIR}
-)
-
-### Export target from the build tree
-export(EXPORT fri-targets FILE ${CMAKE_CURRENT_BINARY_DIR}/FRITargets.cmake NAMESPACE FRI)
-
-### Register package in user's package registry
-export(PACKAGE FRI)
+    build_fri_example(IOAccess)
+    build_fri_example(LBRJointSineOverlay)
+    build_fri_example(LBRTorqueSineOverlay)
+    build_fri_example(LBRWrenchSineOverlay)
+    build_fri_example(SimulatedTransformationProvider)
+    build_fri_example(TransformationProvider)
+endif(BUILD_FRI_APPS)
