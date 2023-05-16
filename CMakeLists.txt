@@ -31,7 +31,7 @@ add_library(nanopb SHARED
 
 target_include_directories(nanopb
     PUBLIC
-        $<INSTALL_INTERFACE:include>
+        $<INSTALL_INTERFACE:include/nanopb-${NANOPB_VERSION}>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/nanopb-${NANOPB_VERSION}>
 )
 
