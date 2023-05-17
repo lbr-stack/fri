@@ -1,57 +1,81 @@
-### CMake support for KUKA's Fast Robot Interface library
+####################################################################
+# cmake support for KUKA's Fast Robot Interface (FRI) client library
+####################################################################
 cmake_minimum_required(VERSION 3.18)
 
-project(FRI VERSION 1.0.0
-        DESCRIPTION "KUKA's Fast Robot Interface."
+project(FRIClient VERSION 1.0.0
+        DESCRIPTION "KUKA's Fast Robot Interface client library."
         LANGUAGES C CXX)
 
-set(FRI_CLIENT_SDK_NAME FRI-Client-SDK_Cpp)
-set(NANOPB_VERSION 0.2.8)
+######################
+# variable definitions
+######################
+set(FRIClient_SDK_NAME "FRI-Client-SDK_Cpp")
+option(BUILD_FRI_APPS "Build FRIClient example applications" OFF)
 
-option(BUILD_FRI_APPS "Build FRI example applications" OFF)
-
+#########################################
+# extract the FRIClient from the zip file
+#########################################
 file(ARCHIVE_EXTRACT
-    INPUT ${CMAKE_CURRENT_SOURCE_DIR}/${FRI_CLIENT_SDK_NAME}.zip
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}
+    INPUT ${CMAKE_CURRENT_SOURCE_DIR}/${FRIClient_SDK_NAME}.zip
+    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}
 )
 
+#######################
+# find library versions
+#######################
+# try to find nanopb version
+file(GLOB NANOPB_HEADER_PATH ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/nanopb-*/pb.h)
+file(READ ${NANOPB_HEADER_PATH} NANOPB_HEADER)
+string(REGEX MATCH "NANOPB_VERSION nanopb-([0-9]*).([0-9]*).([0-9]*)" _ ${NANOPB_HEADER})
+
+set(NANOPB_VERSION_MAJOR ${CMAKE_MATCH_1})
+set(NANOPB_VERSION_MINOR ${CMAKE_MATCH_2})
+set(NANOPB_VERSION_PATCH ${CMAKE_MATCH_3})
+set(NANOPB_VERSION ${NANOPB_VERSION_MAJOR}.${NANOPB_VERSION_MINOR}.${NANOPB_VERSION_PATCH})
+
+message("Found nanopb of version: " ${NANOPB_VERSION})
+
+# #13: Windows support
+# if (MSVC)
+#     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+# endif()
+
+# try to find FRIClient version
+file(READ ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/include/friClientIf.h FRI_CLIENT_IF_HEADER)
+string(REGEX MATCH "\\version {([0-9]*).([0-9]*)}" _ ${FRI_CLIENT_IF_HEADER})
+
+set(FRICLIENT_VERSION_MAJOR ${CMAKE_MATCH_1})
+set(FRICLIENT_VERSION_MINOR ${CMAKE_MATCH_2})
+set(FRICLIENT_VERSION ${FRICLIENT_VERSION_MAJOR}.${FRICLIENT_VERSION_MINOR})
+
+message("Found FRIClient of version: " ${FRICLIENT_VERSION})
+
+########################
+# define library targets
+########################
 # add nanopb target
 message(STATUS "Configuring nanopb version ${NANOPB_VERSION}")
 
 set(NANOPB_SOURCES
-    ${FRI_CLIENT_SDK_NAME}/src/nanopb-${NANOPB_VERSION}/pb_decode.c
-    ${FRI_CLIENT_SDK_NAME}/src/nanopb-${NANOPB_VERSION}/pb_encode.c
+    ${FRIClient_SDK_NAME}/src/nanopb-${NANOPB_VERSION}/pb_decode.c
+    ${FRIClient_SDK_NAME}/src/nanopb-${NANOPB_VERSION}/pb_encode.c
 )
 
 add_library(nanopb SHARED
     ${NANOPB_SOURCES}
 )
 
+add_library(FRIClient::nanopb ALIAS nanopb) # alias for anyone adding this as a submodule
+
 target_include_directories(nanopb
     PUBLIC
         $<INSTALL_INTERFACE:include/nanopb-${NANOPB_VERSION}>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/nanopb-${NANOPB_VERSION}>
-)
-
-# add fri target
-message(STATUS "Configuring FRI version ${FRI_VERSION}")
-
-file(GLOB_RECURSE FRI_SOURCES RELATIVE ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/base/*.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/client_lbr/*.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/client_trafo/*.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/connection/*.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/protobuf/*.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/protobuf/*.c
-    ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/protobuf_gen/*.pb.c
-)
-
-add_library(fri SHARED
-    ${FRI_SOURCES}
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/nanopb-${NANOPB_VERSION}>
 )
 
 if(MSVC)
-    target_compile_options(fri
+    target_compile_options(nanopb
         PRIVATE
             -DPB_SYSTEM_HEADER="pb_syshdr_win.h"
             -DPB_FIELD_16BIT
@@ -60,9 +84,10 @@ if(MSVC)
             -DHAVE_STDBOOL_H
     )
 else()
-    target_compile_options(fri
+    target_compile_options(nanopb
         PRIVATE
-            -Ofast
+            -Wall
+            -O2
             -DHAVE_SOCKLEN_T
             -DPB_SYSTEM_HEADER="pb_syshdr.h"
             -DPB_FIELD_16BIT
@@ -74,26 +99,102 @@ else()
     ) 
 endif()
 
-target_include_directories(fri
+# add FRIClient target
+message(STATUS "Configuring FRIClient version ${FRI_VERSION}")
+
+file(GLOB_RECURSE FRI_SOURCES RELATIVE ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/base/*.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/client_lbr/*.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/client_trafo/*.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/connection/*.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf/*.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf/*.c
+    ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf_gen/*.pb.c
+)
+
+add_library(FRIClient SHARED
+    ${FRI_SOURCES}
+)
+
+target_include_directories(FRIClient
     PUBLIC
         $<INSTALL_INTERFACE:include>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/include>
     PRIVATE
-        ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/base
-        ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/protobuf
-        ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/src/protobuf_gen
+        ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/base
+        ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf
+        ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf_gen
 )
 
-target_link_libraries(fri
+target_link_libraries(FRIClient
     PRIVATE
-        nanopb
+        FRIClient::nanopb
 )
 
+if(MSVC)
+    target_compile_options(FRIClient
+        PRIVATE
+            -DPB_SYSTEM_HEADER="pb_syshdr_win.h"
+            -DPB_FIELD_16BIT
+            -DWIN32
+            -DHAVE_STDINT_H
+            -DHAVE_STDBOOL_H
+    )
+else()
+    target_compile_options(FRIClient
+        PRIVATE
+            -Wall
+            -O2
+            -DHAVE_SOCKLEN_T
+            -DPB_SYSTEM_HEADER="pb_syshdr.h"
+            -DPB_FIELD_16BIT
+            -DHAVE_STDINT_H
+            -DHAVE_STDDEF_H
+            -DHAVE_STDBOOL_H
+            -DHAVE_STDLIB_H
+            -DHAVE_STRING_H
+    ) 
+endif()
+
+#################
+# install targets
+#################
+include(CMakePackageConfigHelpers)
+
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/FRIClientConfigVersion.cmake"
+    VERSION ${FRICLIENT_VERSION}
+    COMPATIBILITY SameMajorVersion
+)
+
+install(TARGETS FRIClient nanopb
+    EXPORT FRIClientTargets
+    LIBRARY DESTINATION lib
+    INCLUDES DESTINATION include
+)
+
+install(
+    DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/include/
+    DESTINATION include
+)
+
+install(EXPORT FRIClientTargets
+    FILE FRIClientConfig.cmake
+    NAMESPACE FRIClient::
+    DESTINATION lib/cmake/FRIClient
+)
+
+install(FILES ${CMAKE_BINARY_DIR}/FRIClientConfigVersion.cmake
+    DESTINATION lib/cmake/FRIClient
+)
+
+################
 # build examples
+################
 if (BUILD_FRI_APPS)
     function(build_fri_example NAME)
         file(GLOB_RECURSE ${NAME}_SOURCES RELATIVE ${CMAKE_CURRENT_BINARY_DIR}
-            ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/example/${NAME}/*.cpp
+            ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/example/${NAME}/*.cpp
         )
 
         add_executable(${NAME}App
@@ -102,12 +203,12 @@ if (BUILD_FRI_APPS)
 
         target_include_directories(${NAME}App
             PRIVATE
-                ${CMAKE_CURRENT_BINARY_DIR}/${FRI_CLIENT_SDK_NAME}/example/${NAME}
+                ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/example/${NAME}
         )
 
         target_link_libraries(${NAME}App
             PRIVATE
-                fri
+                FRIClient
         )
     endfunction()
 
