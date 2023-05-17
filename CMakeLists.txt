@@ -116,6 +116,8 @@ add_library(FRIClient SHARED
     ${FRI_SOURCES}
 )
 
+add_library(FRIClient::FRIClient ALIAS FRIClient) # alias for anyone adding this as a submodule
+
 target_include_directories(FRIClient
     PUBLIC
         $<INSTALL_INTERFACE:include>
