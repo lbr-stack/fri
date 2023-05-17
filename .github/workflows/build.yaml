@@ -5,14 +5,16 @@ on:
   push:
   pull_request:
     branches:
-      - fri-1.15
+      - fri-1.14
+  schedule:
+    - cron: "0 0 1 * *" # monthly
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3      
+        uses: actions/checkout@v3
       - name: Configure CMake
         run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release
       - name: Build
