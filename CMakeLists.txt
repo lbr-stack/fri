@@ -18,7 +18,7 @@ option(BUILD_FRI_APPS "Build FRIClient example applications" OFF)
 #########################################
 file(ARCHIVE_EXTRACT
     INPUT ${CMAKE_CURRENT_SOURCE_DIR}/${FRIClient_SDK_NAME}.zip
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}
+    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 #######################
@@ -49,58 +49,19 @@ set(FRICLIENT_VERSION_MAJOR ${CMAKE_MATCH_1})
 set(FRICLIENT_VERSION_MINOR ${CMAKE_MATCH_2})
 set(FRICLIENT_VERSION ${FRICLIENT_VERSION_MAJOR}.${FRICLIENT_VERSION_MINOR})
 
-message("Found FRIClient of version: " ${FRICLIENT_VERSION})
-
-########################
-# define library targets
-########################
-# add nanopb target
-message(STATUS "Configuring nanopb version ${NANOPB_VERSION}")
-
-set(NANOPB_SOURCES
-    ${FRIClient_SDK_NAME}/src/nanopb-${NANOPB_VERSION}/pb_decode.c
-    ${FRIClient_SDK_NAME}/src/nanopb-${NANOPB_VERSION}/pb_encode.c
-)
-
-add_library(nanopb SHARED
-    ${NANOPB_SOURCES}
-)
-
-add_library(FRIClient::nanopb ALIAS nanopb) # alias for anyone adding this as a submodule
-
-target_include_directories(nanopb
-    PUBLIC
-        $<INSTALL_INTERFACE:include/nanopb-${NANOPB_VERSION}>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/nanopb-${NANOPB_VERSION}>
-)
-
-if(MSVC)
-    target_compile_options(nanopb
-        PRIVATE
-            -DPB_SYSTEM_HEADER="pb_syshdr_win.h"
-            -DPB_FIELD_16BIT
-            -DWIN32
-            -DHAVE_STDINT_H
-            -DHAVE_STDBOOL_H
-    )
-else()
-    target_compile_options(nanopb
-        PRIVATE
-            -Wall
-            -O2
-            -DHAVE_SOCKLEN_T
-            -DPB_SYSTEM_HEADER="pb_syshdr.h"
-            -DPB_FIELD_16BIT
-            -DHAVE_STDINT_H
-            -DHAVE_STDDEF_H
-            -DHAVE_STDBOOL_H
-            -DHAVE_STDLIB_H
-            -DHAVE_STRING_H
-    ) 
+if (NOT FRICLIENT_VERSION STREQUAL "2.5")
+    message(FATAL_ERROR "Expected FRIClient ersion 2.5, found: " ${FRICLIENT_VERSION})
 endif()
 
-# add FRIClient target
+message("Found FRIClient of version: " ${FRICLIENT_VERSION})
+
+#################################
+# define FRIClient library target
+#################################
 message(STATUS "Configuring FRIClient version ${FRI_VERSION}")
+file(GLOB_RECURSE NANOPB_SOURCES RELATIVE ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/nanopb-${NANOPB_VERSION}/*.c
+)
 
 file(GLOB_RECURSE FRI_SOURCES RELATIVE ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/base/*.cpp
@@ -124,13 +85,9 @@ target_include_directories(FRIClient
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/include>
     PRIVATE
         ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/base
-        ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf
+        ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/nanopb-${NANOPB_VERSION}
         ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf_gen
-)
-
-target_link_libraries(FRIClient
-    PRIVATE
-        FRIClient::nanopb
+        ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf
 )
 
 if(MSVC)
@@ -169,7 +126,7 @@ write_basic_package_version_file(
     COMPATIBILITY SameMajorVersion
 )
 
-install(TARGETS FRIClient nanopb
+install(TARGETS FRIClient
     EXPORT FRIClientTargets
     LIBRARY DESTINATION lib
     INCLUDES DESTINATION include
