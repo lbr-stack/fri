@@ -29,17 +29,12 @@ Do you use a different FRI version?
     * In the `Software` tab of `StationSetup.cat`, add `Fast Robot Interface Extension`.
     * Save via `ctrl+s`, click `Save and apply`.
     * Under `FastRobotInterface_Client_Source`, find `FRI-Client-SDK_Cpp.zip`.
-    * In `FRI-Client-SDK_Cpp.zip`, under `include/friLBRCommand.h`, add a forward declaration for `FRIMonitoringMessage` (bug in KUKA library)
-    ```cpp
-    // forward declarations
-    typedef struct _FRICommandMessage FRICommandMessage;
-    typedef struct _FRIMonitoringMessage FRIMonitoringMessage; // add this line
-    ```
 
   <figure>
     <p align="center"><img src="img/00_extract_fri_client_sdk.png" width="25%" height="25%" hspace="20"><img   src="img/01_extract_fri_client_sdk.png" width="25%" height="25%" hspace="20"><img src="img/02_extract_fri_client_sdk.png" width="25%" height="25%" hspace="20"></p>
     <figcaption></figcaption>
   </figure>
+
 4. Open a pull request.
 
 ## License
