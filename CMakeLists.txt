@@ -75,6 +75,7 @@ file(GLOB_RECURSE FRI_SOURCES RELATIVE ${CMAKE_CURRENT_BINARY_DIR}
 
 add_library(FRIClient SHARED
     ${FRI_SOURCES}
+    ${NANOPB_SOURCES}
 )
 
 add_library(FRIClient::FRIClient ALIAS FRIClient) # alias for anyone adding this as a submodule
