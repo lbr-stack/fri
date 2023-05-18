@@ -18,7 +18,7 @@ option(BUILD_FRI_APPS "Build FRIClient example applications" OFF)
 #########################################
 file(ARCHIVE_EXTRACT
     INPUT ${CMAKE_CURRENT_SOURCE_DIR}/${FRIClient_SDK_NAME}.zip
-    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}
 )
 
 #######################
