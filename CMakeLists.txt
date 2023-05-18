@@ -70,7 +70,7 @@ add_library(FRIClient::nanopb ALIAS nanopb) # alias for anyone adding this as a 
 
 target_include_directories(nanopb
     PUBLIC
-        $<INSTALL_INTERFACE:include/nanopb-${NANOPB_VERSION}>
+        $<INSTALL_INTERFACE:include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/nanopb-${NANOPB_VERSION}>
 )
 
