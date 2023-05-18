@@ -129,7 +129,7 @@ target_include_directories(FRIClient
 )
 
 target_link_libraries(FRIClient
-    PRIVATE
+    PUBLIC
         FRIClient::nanopb
 )
 
