@@ -122,10 +122,10 @@ target_include_directories(FRIClient
     PUBLIC
         $<INSTALL_INTERFACE:include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf_gen> # KUKA fails to forward declare some of these structs
     PRIVATE
         ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/base
         ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf
-        ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf_gen
 )
 
 target_link_libraries(FRIClient
@@ -178,6 +178,12 @@ install(TARGETS FRIClient nanopb
 install(
     DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/include/
     DESTINATION include
+)
+
+install(
+    DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf_gen/ # KUKA fails to forward declare some of these structs
+    DESTINATION include
+    FILES_MATCHING PATTERN "*.h"
 )
 
 install(EXPORT FRIClientTargets
