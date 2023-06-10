@@ -57,65 +57,73 @@ cost of any service and repair.
 \file
 \version {2.5}
 */
-#ifndef _pb_frimessages_callbacks_H
-#define _pb_frimessages_callbacks_H
+#ifndef _KUKA_FRI_DATA_HELPER_H
+#define _KUKA_FRI_DATA_HELPER_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <cmath>
 
-#include "pb.h"
-#include "FRIMessages.pb.h"
+namespace KUKA
+{
+   namespace FRI
+   {
 
-/** container for repeated double elements */
-typedef struct repeatedDoubleArguments {
-   size_t size;
-   size_t max_size;
-   double* value;
-} tRepeatedDoubleArguments;
+      /**
+      * \brief Data helper class containing conversion functions.
+      */
+      struct DataHelper
+      {
 
-/** container for repeated integer elements */
-typedef struct repeatedIntArguments {
-   size_t size;
-   size_t max_size;
-   int64_t* value;
-} tRepeatedIntArguments;
+         /**
+         * \brief Helper enum to access quaternion entries.
+         */
+         enum QUATERNION_IDX
+         {
+            QUAT_TX = 0,
+            QUAT_TY,
+            QUAT_TZ,
+            QUAT_QW,
+            QUAT_QX,
+            QUAT_QY,
+            QUAT_QZ
+         };
 
-/** enumeration for direction (encoding/decoding) */
-typedef enum DIRECTION {
-   FRI_MANAGER_NANOPB_DECODE = 0, //!< Argument um eine 
-   FRI_MANAGER_NANOPB_ENCODE = 1  //!< 
-} eNanopbCallbackDirection;
+
+         /**
+         * \brief Function to convert a matrix transformation to a normalized quaternion transformation.
+         *
+         * The resulting quaternion transformation is provided as [t_x, t_y, t_z, q_w, q_x, q_y, q_z],
+         * with a unit quaternion, i.e. the length of vector [q_w, q_x, q_y, q_z] must be 1.
+         * The input transformation matrix has 3x4 elements. It consists of a rotational matrix (3x3 elements)
+         * and a translational vector (3x1 elements). The complete transformation matrix has the
+         * following structure:
+         * [Transformation(3x4)] = [Rotation(3x3) | Translation(3x1) ]
+         *
+         * @param[in]  matrixTrafo       given matrix transformation
+         * @param[out] quaternionTrafo   resulting quaternion transformation
+         */
+         static void convertTrafoMatrixToQuaternion(const double (&matrixTrafo)[3][4],
+            double (&quaternionTrafo)[7]);
 
 
-bool encode_repeatedDouble(pb_ostream_t *stream, const pb_field_t *field,
-      void * const *arg);
+         /**
+         * \brief Function to convert a quaternion transformation to a matrix transformation.
+         *
+         * The input quaternion transformation must be provided as [t_x, t_y, t_z, q_w, q_x, q_y, q_z],
+         * with a unit quaternion, i.e. the length of vector [q_w, q_x, q_y, q_z] must be 1.
+         * The output transformation matrix has 3x4 elements. It consists of a rotational matrix (3x3 elements)
+         * and a translational vector (3x1 elements). The complete transformation matrix has the
+         * following structure:
+         * [Transformation(3x4)] = [Rotation(3x3) | Translation(3x1) ]
+         *
+         * @param[in]  quaternionTrafo    given quaternion transformation
+         * @param[out] matrixTrafo        resulting matrix transformation
+         */
+         static void convertTrafoQuaternionToMatrix(const double(&quaternionTrafo)[7],
+            double(&matrixTrafo)[3][4]);
 
-bool decode_repeatedDouble(pb_istream_t *stream, const pb_field_t *field,
-      void **arg);
+      };
 
-bool encode_repeatedInt(pb_ostream_t *stream, const pb_field_t *field,
-      void * const *arg);
+   }
+}
 
-bool decode_repeatedInt(pb_istream_t *stream, const pb_field_t *field,
-      void **arg);
-
-void map_repeatedDouble(eNanopbCallbackDirection dir, int numDOF,
-      pb_callback_t *values, tRepeatedDoubleArguments *arg);
-
-void map_repeatedInt(eNanopbCallbackDirection dir, int numDOF,
-      pb_callback_t *values, tRepeatedIntArguments *arg);
-
-void init_repeatedDouble(tRepeatedDoubleArguments *arg);
-
-void init_repeatedInt(tRepeatedIntArguments *arg);
-
-void free_repeatedDouble(tRepeatedDoubleArguments *arg);
-
-void free_repeatedInt(tRepeatedIntArguments *arg);
-
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
-
-#endif
+#endif // _KUKA_FRI_DATA_HELPER_H

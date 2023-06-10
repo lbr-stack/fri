@@ -29,6 +29,8 @@ add_library(fri
     src/friTransformationClient.cpp
     src/friUdpConnection.cpp
     src/pb_frimessages_callbacks.c
+    src/friDataHelper.cpp
+    src/pb.h
 )
 
 # Add compile options
