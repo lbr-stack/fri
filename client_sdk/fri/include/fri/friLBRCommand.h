@@ -61,6 +61,7 @@ cost of any service and repair.
 #define _KUKA_FRI_LBR_COMMAND_H
 
 #include <stddef.h>
+#include "FRIMessages.pb.h"
 
 // forward declarations
 typedef struct _FRICommandMessage FRICommandMessage;
