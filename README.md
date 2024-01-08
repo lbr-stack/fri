@@ -40,6 +40,20 @@ Do you use a different FRI version?
 ## License
 Please note that we distribute the CMake support under MIT license. Please note that third party libraries under `FRI-Client-SDK_Cpp.zip` are distributed under their respective license.
 
+## Citation
+If you enjoyed using this repository for your work, we would really appreciate ❤️ if you could cite it, as it helps us to continue offering support.
+
+```
+@misc{huber2023lbrstack,
+      title={LBR-Stack: ROS 2 and Python Integration of KUKA FRI for Med and IIWA Robots}, 
+      author={Martin Huber and Christopher E. Mower and Sebastien Ourselin and Tom Vercauteren and Christos Bergeles},
+      year={2023},
+      eprint={2311.12709},
+      archivePrefix={arXiv},
+      primaryClass={cs.RO}
+}
+```
+
 ## Acknowledgements
 <img src="https://medicalengineering.org.uk/wp-content/themes/aalto-child/_assets/images/medicalengineering-logo.svg" alt="wellcome" height="45" width="65" align="left">
 
