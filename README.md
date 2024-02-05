@@ -1,6 +1,4 @@
 # fri
-![GitHub](https://img.shields.io/github/license/KCL-BMEIS/fri)
-
 This folder adds CMake support to KUKA's Fast Robot Interface (FRI).
 
 ## Build
