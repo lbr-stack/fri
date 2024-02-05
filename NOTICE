@@ -1,0 +1,12 @@
+=====================================
+Third party software
+=====================================
+Software under FRI-Client-SDK_Cpp.zip
+is third party software. It is provideded 
+by KUKA. It contains:
+
+- fri: Their custom license notice is included, as per condition. It can be re-distributed provided the license notice
+       is included.
+- nanopb: A library that KUKA uses for the fri. 
+          nanopb is distributed under zlib license Copyright (c) 2011 Petteri Aimonen <jpa at nanopb.mail.kapsi.fi>
+=====================================

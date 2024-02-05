@@ -144,7 +144,7 @@ install(EXPORT FRIClientTargets
     DESTINATION lib/cmake/FRIClient
 )
 
-install(FILES ${CMAKE_BINARY_DIR}/FRIClientConfigVersion.cmake
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/FRIClientConfigVersion.cmake
     DESTINATION lib/cmake/FRIClient
 )
 
