@@ -22,8 +22,7 @@ On the `smartPAD`, run the `LBRJointSineOverlay` application. You should see the
 Do you use a different FRI version?
 
 1. Fork this repository.
-2. Create a branch fri-major.minor (e.g. fri-1.15).
-3. Replace `FRI-Client-SDK_Cpp.zip` with your client SDK as extracted from `KUKA Sunrise Workbench`. Therefore (see images):
+2. Replace `FRI-Client-SDK_Cpp.zip` with your client SDK as extracted from `KUKA Sunrise Workbench`. Therefore (see images):
     * In the `Software` tab of `StationSetup.cat`, add `Fast Robot Interface Extension`.
     * Save via `ctrl+s`, click `Save and apply`.
     * Under `FastRobotInterface_Client_Source`, find `FRI-Client-SDK_Cpp.zip`.
@@ -33,7 +32,8 @@ Do you use a different FRI version?
     <figcaption></figcaption>
   </figure>
 
-4. Open a pull request.
+3. Open an issue and ask for a branch named fri-major.minor (e.g. fri-1.15).
+4. Open a pull request against this new branch.
 
 ## License
 Please note that we distribute the CMake support under Apache-2.0 license. Please note that third party libraries under `FRI-Client-SDK_Cpp.zip` are distributed under their respective license. See [NOTICE](NOTICE).
