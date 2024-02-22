@@ -1,4 +1,6 @@
 # fri
+[![Build status](https://github.com/lbr-stack/fri/actions/workflows/build.yaml/badge.svg?branch=fri-1.15)](https://github.com/lbr-stack/fri/actions/workflows/build.yaml)
+
 This folder adds CMake support to KUKA's Fast Robot Interface (FRI).
 
 ## Build
