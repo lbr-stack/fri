@@ -5,7 +5,7 @@ on:
   push:
   pull_request:
     branches:
-      - fri-1.15
+      - fri-1.16
   schedule:
     - cron: "0 0 1 * *" # monthly
 
