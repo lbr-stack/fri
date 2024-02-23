@@ -55,6 +55,11 @@ endif()
 
 message("Found FRIClient of version: " ${FRICLIENT_VERSION})
 
+# create version header
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/friVersion.h.in ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/include/friVersion.h
+)
+
 #################################
 # define FRIClient library target
 #################################
