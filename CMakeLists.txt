@@ -7,6 +7,10 @@ project(FRIClient VERSION 1.0.0
         DESCRIPTION "KUKA's Fast Robot Interface client library."
         LANGUAGES C CXX)
 
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type." FORCE)
+endif()
+
 ######################
 # variable definitions
 ######################
