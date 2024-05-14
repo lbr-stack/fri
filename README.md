@@ -44,4 +44,4 @@ Do you use a different FRI version?
 4. Open a pull request against this new branch.
 
 ## License
-Please note that we distribute the CMake support under Apache-2.0 license. Please note that third party libraries under `FRI-Client-SDK_Cpp.zip` are distributed under their respective license. See [NOTICE](https://github.com/lbr-stack/fri/blob/fri-1.15/NOTICE).
+Please note that we distribute the CMake support under Apache-2.0 license. Please note that third party libraries under `FRI-Client-SDK_Cpp.zip` are distributed under their respective license. See [NOTICE](https://github.com/lbr-stack/fri/blob/fri-2.5/NOTICE).
