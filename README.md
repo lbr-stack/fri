@@ -36,7 +36,7 @@ Do you use a different FRI version?
     * Under `FastRobotInterface_Client_Source`, find `FRI-Client-SDK_Cpp.zip`.
 
   <figure>
-    <p align="center"><img src="https://raw.githubusercontent.com/lbr-stack/fri/fri-1.15/img/00_extract_fri_client_sdk.png" width="25%" height="25%" hspace="20"><img   src="https://raw.githubusercontent.com/lbr-stack/fri/fri-1.15/img/01_extract_fri_client_sdk.png" width="25%" height="25%" hspace="20"><img src="https://raw.githubusercontent.com/lbr-stack/fri/fri-1.15/img/02_extract_fri_client_sdk.png" width="25%" height="25%" hspace="20"></p>
+    <p align="center"><img src="https://raw.githubusercontent.com/lbr-stack/fri/fri-1.14/img/00_extract_fri_client_sdk.png" width="25%" height="25%" hspace="20"><img   src="https://raw.githubusercontent.com/lbr-stack/fri/fri-1.14/img/01_extract_fri_client_sdk.png" width="25%" height="25%" hspace="20"><img src="https://raw.githubusercontent.com/lbr-stack/fri/fri-1.14/img/02_extract_fri_client_sdk.png" width="25%" height="25%" hspace="20"></p>
     <figcaption></figcaption>
   </figure>
 
