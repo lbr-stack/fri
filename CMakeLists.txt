@@ -47,7 +47,7 @@ message("Found nanopb of version: " ${NANOPB_VERSION})
 
 # try to find FRIClient version
 file(READ ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/include/friClientIf.h FRI_CLIENT_IF_HEADER)
-string(REGEX MATCH "\\version {([0-9]*).([0-9]*)}" _ ${FRI_CLIENT_IF_HEADER})
+string(REGEX MATCH "version \\{([0-9]+)\\.([0-9]+)" _ ${FRI_CLIENT_IF_HEADER})
 
 set(FRICLIENT_VERSION_MAJOR ${CMAKE_MATCH_1})
 set(FRICLIENT_VERSION_MINOR ${CMAKE_MATCH_2})
