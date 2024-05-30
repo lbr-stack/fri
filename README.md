@@ -36,7 +36,7 @@ Do you use a different FRI version?
     * Under `FastRobotInterface_Client_Source`, find `FRI-Client-SDK_Cpp.zip`.
 
   <figure>
-    <p align="center"><img src="https://raw.githubusercontent.com/lbr-stack/fri/fri-1.15/img/00_extract_fri_client_sdk.png" width="25%" height="25%" hspace="20"><img   src="https://raw.githubusercontent.com/lbr-stack/fri/fri-1.15/img/01_extract_fri_client_sdk.png" width="25%" height="25%" hspace="20"><img src="https://raw.githubusercontent.com/lbr-stack/fri/fri-1.15/img/02_extract_fri_client_sdk.png" width="25%" height="25%" hspace="20"></p>
+    <p align="center"><img src="https://raw.githubusercontent.com/lbr-stack/fri/fri-2.5/img/00_extract_fri_client_sdk.png" width="25%" height="25%" hspace="20"><img   src="https://raw.githubusercontent.com/lbr-stack/fri/fri-2.5/img/01_extract_fri_client_sdk.png" width="25%" height="25%" hspace="20"><img src="https://raw.githubusercontent.com/lbr-stack/fri/fri-2.5/img/02_extract_fri_client_sdk.png" width="25%" height="25%" hspace="20"></p>
     <figcaption></figcaption>
   </figure>
 
@@ -44,4 +44,4 @@ Do you use a different FRI version?
 4. Open a pull request against this new branch.
 
 ## License
-Please note that we distribute the CMake support under Apache-2.0 license. Please note that third party libraries under `FRI-Client-SDK_Cpp.zip` are distributed under their respective license. See [NOTICE](https://github.com/lbr-stack/fri/blob/fri-1.15/NOTICE).
+Please note that we distribute the CMake support under Apache-2.0 license. Please note that third party libraries under `FRI-Client-SDK_Cpp.zip` are distributed under their respective license. See [NOTICE](https://github.com/lbr-stack/fri/blob/fri-2.5/NOTICE).
