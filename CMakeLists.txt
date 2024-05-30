@@ -54,7 +54,7 @@ set(FRICLIENT_VERSION_MINOR ${CMAKE_MATCH_2})
 set(FRICLIENT_VERSION ${FRICLIENT_VERSION_MAJOR}.${FRICLIENT_VERSION_MINOR})
 
 if (NOT FRICLIENT_VERSION STREQUAL "1.16")
-    message(FATAL_ERROR "Expected FRIClient ersion 1.16, found: " ${FRICLIENT_VERSION})
+    message(FATAL_ERROR "Expected FRIClient version 1.16, found: " ${FRICLIENT_VERSION})
 endif()
 
 message("Found FRIClient of version: " ${FRICLIENT_VERSION})
