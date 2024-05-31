@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>fri_client_sdk</name>
+  <version>2.0.0</version>
+  <description>CMake support for KUKA's FRI.</description>
+  <maintainer email="bo.wang@polimi.it">bowangFromMars</maintainer>
+  <maintainer email="frederic.giraud@balgrist.ch">fredRocs</maintainer>
+  <maintainer email="liver121888@gmail.com">liver121888</maintainer>
+  <maintainer email="mitranopeter@gmail.com">peterMitrano</maintainer>
+  <maintainer email="m.huber_1994@hotmail.de">mhubii</maintainer>
+  <maintainer email="omid.rezayof@utexas.edu">OmidRezayof</maintainer>
+
+  <license>Apache-2.0</license>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>
