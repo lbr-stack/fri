@@ -4,12 +4,12 @@
   <name>fri_client_sdk</name>
   <version>2.0.0</version>
   <description>CMake support for KUKA's FRI.</description>
-  <maintainer email="m.huber_1994@hotmail.de">mhubii</maintainer>
-  <maintainer email="frederic.giraud@balgrist.ch">fredRocs</maintainer>
   <maintainer email="bo.wang@polimi.it">bowangFromMars</maintainer>
-  <maintainer email="mitranopeter@gmail.com">peterMitrano</maintainer>
-  <maintainer email="omid.rezayof@utexas.edu">OmidRezayof</maintainer>
+  <maintainer email="frederic.giraud@balgrist.ch">fredRocs</maintainer>
   <maintainer email="liver121888@gmail.com">liver121888</maintainer>
+  <maintainer email="mitranopeter@gmail.com">peterMitrano</maintainer>
+  <maintainer email="m.huber_1994@hotmail.de">mhubii</maintainer>
+  <maintainer email="omid.rezayof@utexas.edu">OmidRezayof</maintainer>
 
   <license>Apache-2.0</license>
 
