@@ -32,7 +32,7 @@ public class LBRServer extends RoboticsAPIApplication {
 
 	// FRI parameters 
 	private String client_name_;
-	private String[] client_names_ = {"172.31.1.148", "192.170.10.1"};
+	private String[] client_names_ = {"192.170.10.100"}; // add aditional ones if needed
 	private int send_period_;	
 	private String[] send_periods_ = {"1", "2", "5", "10"};  // send period in ms
 
@@ -100,6 +100,7 @@ public class LBRServer extends RoboticsAPIApplication {
 	public void configure_fri() {
 		fri_configuration_ = FRIConfiguration.createRemoteConfiguration(lbr_, client_name_);
 		fri_configuration_.setSendPeriodMilliSec(send_period_);
+        fri_configuration_.setPortOnController(30200);
 		
         getLogger().info("Creating FRI connection to " + fri_configuration_.getHostName());
         getLogger().info(
@@ -107,7 +108,9 @@ public class LBRServer extends RoboticsAPIApplication {
 	        + " ReceiveMultiplier: " + fri_configuration_.getReceiveMultiplier()
         );
         
-        fri_session_ = new FRISession(fri_configuration_);
+        // creates FRI-Session and opens the FRI channel from the KUKA controller to the remote system
+        fri_session_ = new FRISession(fri_configuration_); 
+        // overlay joint specific motions
         fri_overlay_ = new FRIJointOverlay(fri_session_, command_mode_);
         
         fri_session_.addFRISessionListener(new IFRISessionListener() {
@@ -128,6 +131,7 @@ public class LBRServer extends RoboticsAPIApplication {
         try {
         	fri_session_.await(10, TimeUnit.SECONDS);
         } catch (final TimeoutException e) {
+        	getLogger().info("Is the remote device client running?");
         	getLogger().error(e.getLocalizedMessage());
         	return;
         }

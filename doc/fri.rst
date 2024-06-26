@@ -13,7 +13,7 @@ If you intend to use the FRI in your own ROS 2 project, you can do so through th
 
 .. code-block:: bash
 
-    git clone https://github.com/KCL-BMEIS/fri.git -b ros2-fri-1.15
+    git clone https://github.com/KCL-BMEIS/fri.git -b ros2-fri-1.16
 
 - In your ``package.xml`` add: 
 

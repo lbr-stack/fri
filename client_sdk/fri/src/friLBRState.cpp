@@ -55,7 +55,7 @@ cost of any service and repair.
 
 
 \file
-\version {1.15}
+\version {1.16}
 */
 #include "fri/friLBRState.h"
 

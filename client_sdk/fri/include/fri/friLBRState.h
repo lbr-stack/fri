@@ -55,7 +55,7 @@ cost of any service and repair.
 
 
 \file
-\version {1.15}
+\version {1.16}
 */
 #ifndef _KUKA_FRI_LBR_STATE_H
 #define _KUKA_FRI_LBR_STATE_H
