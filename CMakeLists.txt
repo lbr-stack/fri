@@ -49,15 +49,15 @@ message("Found nanopb of version: " ${NANOPB_VERSION})
 file(READ ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/include/friClientIf.h FRI_CLIENT_IF_HEADER)
 string(REGEX MATCH "version \\{([0-9]+)\\.([0-9]+)" _ ${FRI_CLIENT_IF_HEADER})
 
-set(FRICLIENT_VERSION_MAJOR ${CMAKE_MATCH_1})
-set(FRICLIENT_VERSION_MINOR ${CMAKE_MATCH_2})
-set(FRICLIENT_VERSION ${FRICLIENT_VERSION_MAJOR}.${FRICLIENT_VERSION_MINOR})
+set(FRI_CLIENT_VERSION_MAJOR ${CMAKE_MATCH_1})
+set(FRI_CLIENT_VERSION_MINOR ${CMAKE_MATCH_2})
+set(FRI_CLIENT_VERSION ${FRI_CLIENT_VERSION_MAJOR}.${FRI_CLIENT_VERSION_MINOR})
 
-if (NOT FRICLIENT_VERSION STREQUAL "1.15")
-    message(FATAL_ERROR "Expected FRIClient version 1.15, found: " ${FRICLIENT_VERSION})
+if (NOT FRI_CLIENT_VERSION STREQUAL "1.15")
+    message(FATAL_ERROR "Expected FRIClient version 1.15, found: " ${FRI_CLIENT_VERSION})
 endif()
 
-message("Found FRIClient of version: " ${FRICLIENT_VERSION})
+message("Found FRIClient of version: " ${FRI_CLIENT_VERSION})
 
 # create version header
 configure_file(
@@ -132,7 +132,7 @@ include(CMakePackageConfigHelpers)
 
 write_basic_package_version_file(
     "${CMAKE_CURRENT_BINARY_DIR}/FRIClientConfigVersion.cmake"
-    VERSION ${FRICLIENT_VERSION}
+    VERSION ${FRI_CLIENT_VERSION}
     COMPATIBILITY SameMajorVersion
 )
 
