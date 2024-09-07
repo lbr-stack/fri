@@ -61,13 +61,13 @@ message("Found FRIClient of version: " ${FRI_CLIENT_VERSION})
 
 # create version header
 configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/friVersion.h.in ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/include/friVersion.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/friClientVersion.h.in ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/include/friClientVersion.h
 )
 
 #################################
 # define FRIClient library target
 #################################
-message(STATUS "Configuring FRIClient version ${FRI_VERSION}")
+message(STATUS "Configuring FRIClient version ${FRI_CLIENT_VERSION}")
 file(GLOB_RECURSE NANOPB_SOURCES RELATIVE ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/nanopb-${NANOPB_VERSION}/*.c
 )
