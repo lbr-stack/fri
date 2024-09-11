@@ -82,12 +82,18 @@ file(GLOB_RECURSE FRI_SOURCES RELATIVE ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf_gen/*.pb.c
 )
 
+# add FRI library target
 add_library(FRIClient SHARED
     ${FRI_SOURCES}
+)
+
+# add nanopb library target under common namespace
+add_library(nanopb STATIC
     ${NANOPB_SOURCES}
 )
 
 add_library(FRIClient::FRIClient ALIAS FRIClient) # alias for anyone adding this as a submodule
+add_library(FRIClient::nanopb ALIAS nanopb) # alias for anyone adding this as a submodule
 
 target_include_directories(FRIClient
     PUBLIC
@@ -95,9 +101,19 @@ target_include_directories(FRIClient
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/include>
     PRIVATE
         ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/base
-        ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/nanopb-${NANOPB_VERSION}
         ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf_gen
         ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf
+)
+
+target_include_directories(nanopb
+    PUBLIC
+        $<INSTALL_INTERFACE:${FRIClient_SDK_NAME}/src/nanopb-${NANOPB_VERSION}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/nanopb-${NANOPB_VERSION}>
+)
+
+target_link_libraries(FRIClient
+    PRIVATE
+        nanopb
 )
 
 if(MSVC)
@@ -136,7 +152,7 @@ write_basic_package_version_file(
     COMPATIBILITY SameMajorVersion
 )
 
-install(TARGETS FRIClient
+install(TARGETS FRIClient nanopb
     EXPORT FRIClientTargets
     LIBRARY DESTINATION lib
     INCLUDES DESTINATION include
@@ -145,6 +161,13 @@ install(TARGETS FRIClient
 install(
     DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/include/
     DESTINATION include
+)
+
+install(
+    DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/nanopb-${NANOPB_VERSION}/
+    DESTINATION include
+    FILES_MATCHING
+        PATTERN *.h
 )
 
 install(EXPORT FRIClientTargets
