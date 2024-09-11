@@ -72,14 +72,27 @@ file(GLOB_RECURSE NANOPB_SOURCES RELATIVE ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/nanopb-${NANOPB_VERSION}/*.c
 )
 
+file(GLOB_RECURSE PROTOBUF_SOURCES RELATIVE ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf/*.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf/*.c
+    ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf_gen/*.pb.c
+)
+
 file(GLOB_RECURSE FRI_SOURCES RELATIVE ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/base/*.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/client_lbr/*.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/client_trafo/*.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/connection/*.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf/*.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf/*.c
-    ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf_gen/*.pb.c
+)
+    
+# add nanopb library target under common namespace
+add_library(nanopb SHARED
+    ${NANOPB_SOURCES}
+)
+
+# add protocol buffers and utilities under common namespace
+add_library(protobuf SHARED
+    ${PROTOBUF_SOURCES}
 )
 
 # add FRI library target
@@ -87,23 +100,9 @@ add_library(FRIClient SHARED
     ${FRI_SOURCES}
 )
 
-# add nanopb library target under common namespace
-add_library(nanopb STATIC
-    ${NANOPB_SOURCES}
-)
-
-add_library(FRIClient::FRIClient ALIAS FRIClient) # alias for anyone adding this as a submodule
 add_library(FRIClient::nanopb ALIAS nanopb) # alias for anyone adding this as a submodule
-
-target_include_directories(FRIClient
-    PUBLIC
-        $<INSTALL_INTERFACE:include>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/include>
-    PRIVATE
-        ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/base
-        ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf_gen
-        ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf
-)
+add_library(FRIClient::protobuf ALIAS protobuf) # alias for anyone adding this as a submodule
+add_library(FRIClient::FRIClient ALIAS FRIClient) # alias for anyone adding this as a submodule
 
 target_include_directories(nanopb
     PUBLIC
@@ -111,13 +110,35 @@ target_include_directories(nanopb
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/nanopb-${NANOPB_VERSION}>
 )
 
-target_link_libraries(FRIClient
+target_include_directories(protobuf
+    PUBLIC
+        $<INSTALL_INTERFACE:${FRIClient_SDK_NAME}/src/protobuf_gen>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf_gen>
+        $<INSTALL_INTERFACE:${FRIClient_SDK_NAME}/src/protobuf>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf>
+)
+
+target_include_directories(FRIClient
+    PUBLIC
+        $<INSTALL_INTERFACE:include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/include>
+    PRIVATE
+        ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/base
+)
+
+target_link_libraries(protobuf
     PRIVATE
         nanopb
 )
 
+target_link_libraries(FRIClient
+    PRIVATE
+        nanopb
+        protobuf
+)
+
 if(MSVC)
-    target_compile_options(FRIClient
+    target_compile_options(nanopb
         PRIVATE
             -DPB_SYSTEM_HEADER="pb_syshdr_win.h"
             -DPB_FIELD_16BIT
@@ -125,12 +146,19 @@ if(MSVC)
             -DHAVE_STDINT_H
             -DHAVE_STDBOOL_H
     )
-else()
+    target_compile_options(protobuf
+        PRIVATE
+            -DPB_FIELD_16BIT
+    )
     target_compile_options(FRIClient
+        PRIVATE
+            -DWIN32
+    )
+else()
+    target_compile_options(nanopb
         PRIVATE
             -Wall
             -O2
-            -DHAVE_SOCKLEN_T
             -DPB_SYSTEM_HEADER="pb_syshdr.h"
             -DPB_FIELD_16BIT
             -DHAVE_STDINT_H
@@ -138,6 +166,18 @@ else()
             -DHAVE_STDBOOL_H
             -DHAVE_STDLIB_H
             -DHAVE_STRING_H
+    )
+    target_compile_options(protobuf
+        PRIVATE
+            -Wall
+            -O2
+            -DPB_FIELD_16BIT
+    )
+    target_compile_options(FRIClient
+        PRIVATE
+            -Wall
+            -O2
+            -DHAVE_SOCKLEN_T
     ) 
 endif()
 
@@ -152,15 +192,24 @@ write_basic_package_version_file(
     COMPATIBILITY SameMajorVersion
 )
 
-install(TARGETS FRIClient nanopb
+install(TARGETS nanopb protobuf FRIClient
     EXPORT FRIClientTargets
     LIBRARY DESTINATION lib
     INCLUDES DESTINATION include
 )
 
 install(
-    DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/include/
+    DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf_gen/
     DESTINATION include
+    FILES_MATCHING
+        PATTERN *.h
+)
+
+install(
+    DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/src/protobuf/
+    DESTINATION include
+    FILES_MATCHING
+        PATTERN *.h
 )
 
 install(
@@ -168,6 +217,11 @@ install(
     DESTINATION include
     FILES_MATCHING
         PATTERN *.h
+)
+
+install(
+    DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${FRIClient_SDK_NAME}/include/
+    DESTINATION include
 )
 
 install(EXPORT FRIClientTargets
