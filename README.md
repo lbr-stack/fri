@@ -4,7 +4,7 @@ This folder adds CMake support to KUKA's Fast Robot Interface (FRI).
 | FRI Version | Build Status |
 | ----------- | ------------ |
 | `1.11`      | [![Build status](https://github.com/lbr-stack/fri/actions/workflows/build.yaml/badge.svg?branch=fri-1.11)](https://github.com/lbr-stack/fri/actions/workflows/build.yaml) |
-| `1.13`      | [![Build status](https://github.com/lbr-stack/fri/actions/workflows/build.yaml/badge.svg?branch=fri-1.14)](https://github.com/lbr-stack/fri/actions/workflows/build.yaml) |
+| `1.13`      | [![Build status](https://github.com/lbr-stack/fri/actions/workflows/build.yaml/badge.svg?branch=fri-1.13)](https://github.com/lbr-stack/fri/actions/workflows/build.yaml) |
 | `1.14`      | [![Build status](https://github.com/lbr-stack/fri/actions/workflows/build.yaml/badge.svg?branch=fri-1.14)](https://github.com/lbr-stack/fri/actions/workflows/build.yaml) |
 | `1.15`      | [![Build status](https://github.com/lbr-stack/fri/actions/workflows/build.yaml/badge.svg?branch=fri-1.15)](https://github.com/lbr-stack/fri/actions/workflows/build.yaml) |
 | `1.16`      | [![Build status](https://github.com/lbr-stack/fri/actions/workflows/build.yaml/badge.svg?branch=fri-1.16)](https://github.com/lbr-stack/fri/actions/workflows/build.yaml) |
